@@ -1,0 +1,43 @@
+<BOUCLE_article_card(ARTICLES){id_article=#ENV{id_article}}>
+<article class="article-card">
+  <div class="article-card-header">
+    <h3 class="article-card-title">
+      <a href="#URL_ARTICLE">#TITRE</a>
+    </h3>
+    <div class="article-card-meta">
+      <time class="article-card-date" datetime="#DATE">[(#DATE|affdate_court)]</time>
+      [<span class="article-card-auteur">par (#LESAUTEURS)</span>]
+    </div>
+  </div>
+
+  [(#LOGO_ARTICLE|oui)
+    <div class="article-card-image">
+      <a href="#URL_ARTICLE">
+        [(#LOGO_ARTICLE|image_reduire{300,200}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+      </a>
+    </div>
+  ]
+
+  [(#LOGO_ARTICLE|non)
+    <BOUCLE_doc_article(DOCUMENTS){id_article}{extension IN jpg,png,gif}{0,1}>
+      <div class="article-card-image">
+        <a href="#URL_ARTICLE">
+          [(#FICHIER|image_reduire{300,200}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+        </a>
+      </div>
+    </BOUCLE_doc_article>
+  ]
+
+  <div class="article-card-intro">
+    [(#CHAPO|sinon{#INTRODUCTION}|sinon{#TEXTE}|textebrut|couper{200})]
+  </div>
+
+  <B_mots_cles>
+    <div class="article-card-mots-cles">
+      <BOUCLE_mots_cles(MOTS){id_article}{0,3}>
+        <a href="#URL_MOT" class="mot-cle">#TITRE</a>
+      </BOUCLE_mots_cles>
+    </div>
+  </B_mots_cles>
+</article>
+</BOUCLE_article_card>

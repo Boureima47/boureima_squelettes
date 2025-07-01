@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Contacts - [(#NOM_SITE_SPIP|textebrut)]</title>
+	<meta name="description" content="Annuaire des contacts - [(#NOM_SITE_SPIP|textebrut)]" />
+	#INSERT_HEAD
+</head>
+
+<body class="page-contacts">
+	<INCLURE{fond=inclure/header, env}>
+
+	<div class="container">
+		<div id="main" role="main">
+			<div class="main-container">
+				<INCLURE{fond=content/contact}>
+				</INCLURE>
+			</div>
+		</div>
+	</div>
+
+	<INCLURE{fond=inclure/footer, env}>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<BOUCLE_rubrique_principale(RUBRIQUES){id_rubrique}>
+<section class="contenu-rubrique">
+	<header class="rubrique-header">
+		<h2>#TITRE</h2>
+		[<div class="descriptif">(#DESCRIPTIF)</div>]
+	</header>
+
+	<B_sous_rubriques>
+	<section class="sous-rubriques">
+		<h3>Sous-rubriques</h3>
+		<div class="liste-sous-rubriques">
+		<BOUCLE_sous_rubriques(RUBRIQUES){id_parent}{par titre}>
+			<div class="sous-rubrique-bloc">
+				<h4><a href="#URL_RUBRIQUE">#TITRE</a></h4>
+				[<div class="descriptif-sous-rubrique">(#DESCRIPTIF|couper{200})</div>]
+
+				<B_articles_sous_rub>
+				<ul class="liste-articles-mini">
+					<BOUCLE_articles_sous_rub(ARTICLES){id_rubrique}{par date}{inverse}{0,3}>
+						<li>
+							<a href="#URL_ARTICLE">#TITRE</a>
+							<span class="date-mini">[(#DATE|affdate_court)]</span>
+						</li>
+					</BOUCLE_articles_sous_rub>
+				</ul>
+				[<div class="voir-plus-rubrique">
+					<a href="#URL_RUBRIQUE" class="btn-voir-tous">
+						Voir tous les articles (#TOTAL_BOUCLE)
+					</a>
+				</div>]
+				</B_articles_sous_rub>
+			</div>
+		</BOUCLE_sous_rubriques>
+		</div>
+	</section>
+	</B_sous_rubriques>
+
+	<B_articles>
+	<section class="articles-rubrique">
+		<h3>Articles de [(#TITRE|attribut_html)]</h3>
+		<div class="articles-list">
+		<BOUCLE_articles(ARTICLES){id_rubrique}{par date}{inverse}{pagination 12}>
+			<INCLURE{fond=modeles/article-card}{id_article}>
+		</BOUCLE_articles>
+		</div>
+		[<div class="pagination">(#PAGINATION{page})</div>]
+	</section>
+	</B_articles>
+	<div class="aucun-article">
+		<p>Aucun article dans cette rubrique pour le moment.</p>
+	</div>
+	<//B_articles>
+</section>
+</BOUCLE_rubrique_principale>
+
+<div class="rubrique-inexistante">
+	<h2>Rubrique non trouvée</h2>
+	<p>La rubrique que vous recherchez n'existe pas ou a été déplacée.</p>
+	<a href="#URL_SITE_SPIP" class="btn-retour">Retourner à l'accueil</a>
+</div>
+<//B_rubrique_principale>

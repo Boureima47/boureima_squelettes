@@ -1,0 +1,15 @@
+<div class="contenu-modifier-contact">
+    <h1>[(#ENV{id_contact}|intval|?{<:contacts:titre_modifier_contact:>, <:contacts:titre_nouveau_contact:>})]</h1>
+
+    <div class="formulaire-container">
+        [(#FORMULAIRE_EDITER_CONTACT{#ENV{id_contact}, #ENV{id_organisation}, #SELF})]
+    </div>
+
+    [(#ENV{id_contact}|intval|oui)
+    <div class="actions-contact">
+        <a href="[(#URL_PAGE{contact_detail}|parametre_url{id_contact,#ENV{id_contact}})]" class="btn btn-secondary">
+            <i class="fa fa-arrow-left"></i> <:contacts:retour_contact:>
+        </a>
+    </div>
+    ]
+</div>

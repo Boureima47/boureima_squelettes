@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<paquet
+	prefix="boureima_squelettes"
+	categorie="squelette"
+	version="1.0.1"
+	etat="dev"
+	compatibilite="[4.4.0;4.*]"
+	logo="prive/themes/spip/images/squelettes-32.png"
+	schema="1.0.1"
+>
+	<nom>Boureima - Squelettes</nom>
+
+	<auteur lien="https://boureima-spip.test">Boureima</auteur>
+	<licence>GPL-3.0-only</licence>
+
+	<necessite nom="SPIP" compatibilite="[4.4.0;4.*]" />
+	<necessite nom="agenda" compatibilite="[4.0.0;]" />
+
+	<pipeline nom="declarer_tables_objets_sql" inclure="boureima_squelettes_pipelines.php" />
+	<pipeline nom="declarer_tables_interfaces" inclure="boureima_squelettes_pipelines.php" />
+
+	<script source="js/boureima_squelettes.js" />
+</paquet>

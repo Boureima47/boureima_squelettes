@@ -1,0 +1,237 @@
+<div class="contenu-recherche">
+
+	[(#ENV{recherche}|oui)
+		<div class="resultats-header">
+			<h2>Recherche dans les articles et événements : "[(#ENV{recherche}|entites_html)]"</h2>
+		</div>
+
+		<div class="recherche-deux-colonnes">
+			<!-- Colonne de gauche : filtres -->
+			<div class="colonne-filtres">
+				<div class="bloc-filtres">
+					<h3>Filtrer les résultats</h3>
+
+					<!-- Filtre par type de contenu -->
+					<div class="filtre-groupe">
+						<label for="filtre-type">Type de contenu</label>
+						<select id="filtre-type" class="filtre-select">
+							<option value="tous" selected>Tous les contenus</option>
+							<option value="articles">Articles uniquement</option>
+							<option value="evenements">Événements uniquement</option>
+						</select>
+					</div>
+
+					<!-- Filtre par date -->
+					<div class="filtre-groupe">
+						<label for="filtre-date">Date de publication</label>
+						<select id="filtre-date" class="filtre-select">
+							<option value="tous" selected>Toutes les dates</option>
+							<option value="recent">Derniers 30 jours</option>
+							<option value="mois">Derniers 3 mois</option>
+							<option value="annee">Dernière année</option>
+						</select>
+					</div>
+
+					<!-- Filtre par rubrique -->
+					<div class="filtre-groupe">
+						<label for="filtre-rubrique">Rubrique</label>
+						<select id="filtre-rubrique" class="filtre-select">
+							<option value="tous" selected>Toutes les rubriques</option>
+							<BOUCLE_rubriques(RUBRIQUES){par titre}>
+							<option value="#ID_RUBRIQUE">#TITRE</option>
+							</BOUCLE_rubriques>
+						</select>
+					</div>
+
+					<!-- Bouton pour appliquer les filtres -->
+					<button id="appliquer-filtres" class="btn-filtres">Appliquer les filtres</button>
+					<button id="reinitialiser-filtres" class="btn-filtres btn-reinitialiser">Réinitialiser</button>
+				</div>
+
+				<!-- Recherches populaires -->
+				<div class="recherches-populaires-sidebar">
+					<h3>Recherches populaires</h3>
+					<div class="tags-recherche">
+						<a href="?recherche=formation" class="tag-recherche">formation</a>
+						<a href="?recherche=événement" class="tag-recherche">événement</a>
+						<a href="?recherche=actualité" class="tag-recherche">actualité</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Colonne de droite : résultats -->
+			<div class="colonne-resultats">
+				<!-- Compter les résultats des boucles -->
+				<BOUCLE_compte_articles(ARTICLES){recherche}{doublons articles_comptes}> </BOUCLE_compte_articles>
+				<BOUCLE_compte_evenements(ARTICLES){titre_mot=evenement}{recherche}{doublons evenements_comptes}> </BOUCLE_compte_evenements>
+
+				<!-- Résumé global -->
+				<div class="resultats-resume">
+					<p>
+						<strong>Total des résultats :</strong>
+						#TOTAL_BOUCLE{compte_articles}|plus{#TOTAL_BOUCLE{compte_evenements}} élément(s) trouvé(s)
+					</p>
+				</div>
+				</B_compte_articles>
+				</B_compte_evenements>
+
+				<!-- Résultats Articles -->
+				<B_articles_recherche>
+				<section class="resultats-section articles-section" data-type="articles">
+					<h3>Articles <span class="count">([(#GRAND_TOTAL)])</span></h3>
+					<div class="resultats-liste">
+					<BOUCLE_articles_recherche(ARTICLES){recherche}{par points}{inverse}{pagination 5}>
+						<article class="resultat-item resultat-article">
+							<h4><a href="#URL_ARTICLE">#TITRE</a></h4>
+							<div class="resultat-meta">
+								[<span class="resultat-date">(#DATE|affdate)</span>]
+								[<span class="resultat-rubrique">dans <a href="#URL_RUBRIQUE">(#TITRE{rubrique})</a></span>]
+							</div>
+							[<div class="resultat-introduction">(#INTRODUCTION|couper{200})</div>]
+
+							<!-- Extrait avec mise en surbrillance -->
+							<div class="resultat-extrait">
+								[(#TEXTE|extraire_multi|supprimer_tags|texte_backend|couper{300})]
+							</div>
+						</article>
+					</BOUCLE_articles_recherche>
+					</div>
+					[<nav class="pagination-articles">(#PAGINATION{precedent_suivant})</nav>]
+				</section>
+				</B_articles_recherche>
+
+				<!-- Résultats Événements -->
+				<B_evenements_recherche>
+				<section class="resultats-section evenements-section" data-type="evenements">
+					<h3>Événements <span class="count">([(#GRAND_TOTAL)])</span></h3>
+					<div class="resultats-liste">
+					<BOUCLE_evenements_recherche(ARTICLES){titre_mot=evenement}{recherche}{par date}{inverse}{0,5}>
+						<article class="resultat-item resultat-evenement">
+							<div class="evenement-date-mini">
+								<span class="jour">#DATE{d}</span>
+								<span class="mois">#DATE{M}</span>
+							</div>
+							<div class="evenement-info">
+								<h4><a href="#URL_ARTICLE">#TITRE</a></h4>
+								[<div class="evenement-lieu-mini">(#CHAMP_EXTRA{lieu})</div>]
+								[<div class="resultat-introduction">(#INTRODUCTION|couper{150})</div>]
+							</div>
+							<div class="evenement-statut">
+								[(#DATE|>{#DATE{Y-m-d}}|?{
+									<span class="statut-avenir">À venir</span>,
+									<span class="statut-passe">Terminé</span>
+								})]
+							</div>
+						</article>
+					</BOUCLE_evenements_recherche>
+					</div>
+				</section>
+				</B_evenements_recherche>
+
+				<!-- Message si aucun résultat -->
+				<BOUCLE_test_vide(CONDITION){si #TOTAL_BOUCLE{compte_articles}|plus{#TOTAL_BOUCLE{compte_evenements}}|=={0}}>
+					<div class="aucun-resultat-global">
+						<h3>Aucun résultat trouvé</h3>
+						<p>Votre recherche "[(#ENV{recherche}|entites_html)]" n'a donné aucun résultat dans les articles et événements.</p>
+						<div class="suggestions-recherche">
+							<h4>Suggestions :</h4>
+							<ul>
+								<li>Vérifiez l'orthographe des mots-clés</li>
+								<li>Essayez des mots-clés plus généraux</li>
+								<li>Essayez des synonymes</li>
+								<li>Utilisez moins de mots-clés</li>
+							</ul>
+						</div>
+					</div>
+				</BOUCLE_test_vide>
+			</div>
+		</div>
+	]
+
+	[(#ENV{recherche}|non)
+		<div class="recherche-vide">
+			<h2>Recherche dans les articles et événements</h2>
+
+			<!-- Ajout du formulaire de recherche -->
+			<div class="formulaire-recherche-page">
+				<form action="spip.php" method="get" class="formulaire-recherche-grand" role="search">
+					<input type="hidden" name="page" value="recherche" />
+					<div class="recherche-container">
+						<input type="search"
+							name="recherche"
+							id="recherche-page"
+							placeholder="Saisissez votre recherche..."
+							value="[(#ENV{recherche}|entites_html)]"
+							autocomplete="off"
+							aria-label="Rechercher sur le site"
+							class="recherche-input-grand" />
+						<button type="submit" class="recherche-submit-grand" aria-label="Lancer la recherche">
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							<span>Rechercher</span>
+						</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="conseils-recherche">
+				<h3>Comment bien rechercher ?</h3>
+				<ul>
+					<li><strong>Mots-clés :</strong> Utilisez des termes précis</li>
+					<li><strong>Guillemets :</strong> "expression exacte" pour une phrase précise</li>
+					<li><strong>Plusieurs mots :</strong> Séparez les mots par des espaces</li>
+				</ul>
+			</div>
+		</div>
+	]
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	// Filtrage par type de contenu
+	const filtreType = document.getElementById('filtre-type');
+	const sections = document.querySelectorAll('.resultats-section');
+
+	if (filtreType) {
+		filtreType.addEventListener('change', function() {
+			const type = this.value;
+
+			sections.forEach(function(section) {
+				if (type === 'tous' || section.getAttribute('data-type') === type) {
+					section.style.display = 'block';
+				} else {
+					section.style.display = 'none';
+				}
+			});
+		});
+	}
+
+	// Réinitialiser les filtres
+	const btnReinitialiser = document.getElementById('reinitialiser-filtres');
+	if (btnReinitialiser) {
+		btnReinitialiser.addEventListener('click', function() {
+			document.querySelectorAll('.filtre-select').forEach(function(select) {
+				select.selectedIndex = 0;
+			});
+
+			// Afficher toutes les sections
+			sections.forEach(function(section) {
+				section.style.display = 'block';
+			});
+		});
+	}
+
+	// Mise en surbrillance des termes recherchés
+	const termeRecherche = new URLSearchParams(window.location.search).get('recherche');
+	if (termeRecherche) {
+		const regex = new RegExp('(' + termeRecherche.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+		const extraits = document.querySelectorAll('.resultat-extrait, .resultat-introduction');
+
+		extraits.forEach(function(extrait) {
+			extrait.innerHTML = extrait.innerHTML.replace(regex, '<mark>$1</mark>');
+		});
+	}
+});
+</script>

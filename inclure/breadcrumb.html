@@ -1,0 +1,37 @@
+<nav class="breadcrumb" aria-label="Fil d'Ariane">
+	<ol class="breadcrumb-list">
+		<li class="breadcrumb-item">
+			<a href="#URL_SITE_SPIP" class="breadcrumb-link">Accueil</a>
+		</li>
+
+		<B_rubrique>
+		<BOUCLE_rubrique(RUBRIQUES){id_rubrique}>
+			<li class="breadcrumb-item">
+				<a href="#URL_RUBRIQUE" class="breadcrumb-link">#TITRE</a>
+			</li>
+		</BOUCLE_rubrique>
+		</B_rubrique>
+
+		<B_article>
+		<BOUCLE_article(ARTICLES){id_article}>
+			<li class="breadcrumb-item">
+				<a href="#URL_ARTICLE" class="breadcrumb-link">#TITRE</a>
+			</li>
+		</BOUCLE_article>
+		</B_article>
+
+		<B_auteur>
+		<BOUCLE_auteur(AUTEURS){id_auteur}>
+			<li class="breadcrumb-item">
+				<span class="breadcrumb-current">#NOM</span>
+			</li>
+		</BOUCLE_auteur>
+		</B_auteur>
+
+		<B_page>
+		<li class="breadcrumb-item">
+			<span class="breadcrumb-current">#ENV{page, titre}</span>
+		</li>
+		</B_page>
+	</ol>
+</nav>

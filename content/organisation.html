@@ -1,0 +1,425 @@
+<div class="contenu-organisations">
+	<!-- Bouton pour créer une nouvelle organisation
+	[(#AUTORISER{creer, organisation}|oui)
+	<div class="actions-organisations">
+		<a href="[(#URL_PAGE{modifier_organisation})]" class="btn btn-success btn-icon">
+			<i class="fa fa-plus"></i> <:contacts:creer_organisation:>
+		</a>
+	</div>
+	] -->
+
+	<!-- Filtres et recherche -->
+	<!-- <div class="filtres-organisations"> -->
+		<!-- <form action="#SELF" method="get" class="form-recherche-orga">
+			<div class="recherche-container">
+				<input type="search"
+				       name="recherche"
+				       id="recherche-orga"
+				       placeholder="Rechercher une organisation..."
+				       value="[(#ENV{recherche}|entites_html)]"
+				       class="recherche-input-orga form-control-sm" />
+				<button type="submit" class="recherche-submit-orga btn btn-primary btn-sm">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</form> -->
+
+		<!-- Filtres par statut juridique -->
+		<!-- <div class="filtres-statut">
+			<label>Filtrer par statut juridique :</label>
+			<select name="statut" id="filtre-statut" onchange="filtrerOrganisations()" class="form-control-sm w-auto">
+				<option value="">Tous les statuts</option>
+				<BOUCLE_statuts(ORGANISATIONS){fusion statut_juridique}{par statut_juridique}>
+					<option value="#STATUT_JURIDIQUE" [(#ENV{statut}|=={#STATUT_JURIDIQUE}|?{selected="selected"})>][(#STATUT_JURIDIQUE|sinon{Non spécifié})]</option>
+				</BOUCLE_statuts>
+			</select>
+		</div> -->
+	<!-- </div> -->
+
+	<!-- Résultats de recherche -->
+	<!-- [(#ENV{recherche}|oui)
+		<div class="resultats-recherche-orga">
+			<h2>Résultats pour : "[(#ENV{recherche}|entites_html)]"</h2>
+		</div> -->
+	<!-- ] -->
+
+	<!-- Tableau des organisations -->
+	<B_organisations>
+	<div class="tableau-organisations-container">
+		<table class="tableau-organisations table table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-logo">Logo</th>
+					<th class="col-nom">Nom</th>
+					<th class="col-statut">Statut juridique</th>
+					<th class="col-email">Email</th>
+					<th class="col-telephone">Téléphone</th>
+					<th class="col-contacts">Contacts</th>
+				</tr>
+			</thead>
+			<tbody>
+				<BOUCLE_organisations(ORGANISATIONS){recherche?}{id_parent?}{compteur_contacts}{par nom}{pagination 20}>
+					<tr class="organisation-row" data-statut="#STATUT_JURIDIQUE">
+						<td class="col-logo">
+							[(#LOGO_ORGANISATION|image_reduire{40,40}|sinon{
+								<div class="logo-placeholder-mini">
+									<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+										<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+									</svg>
+								</div>
+							})]
+						</td>
+						<td class="col-nom"><a href="[(#URL_PAGE{organisation_detail}|parametre_url{id_organisation,#ID_ORGANISATION})]">#NOM</a></td>
+						<td class="col-statut">[(#STATUT_JURIDIQUE|sinon{-})]</td>
+						<td class="col-email">
+							[(#EMAIL|oui)
+								<a href="mailto:#EMAIL">#EMAIL</a>
+							]
+							[(#EMAIL|non)-]
+						</td>
+						<td class="col-telephone">
+							[(#TELEPHONE|oui)
+								<a href="tel:#TELEPHONE">#TELEPHONE</a>
+							]
+							[(#TELEPHONE|non)-]
+						</td>
+						<td class="col-contacts">
+							[(#COMPTEUR_CONTACTS|singulier_ou_pluriel{contacts:nb_contact,contacts:nb_contacts}|sinon{-})]
+						</td>
+					</tr>
+				</BOUCLE_organisations>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination -->
+	[<nav class="pagination-organisations">(#PAGINATION{precedent_suivant})</nav>]
+
+	</B_organisations>
+	<div class="aucune-organisation">
+		[(#ENV{recherche}|oui)
+			<h3>Aucune organisation trouvée</h3>
+			<p>Votre recherche "[(#ENV{recherche}|entites_html)]" n'a donné aucun résultat.</p>
+		]
+		[(#ENV{recherche}|non)
+			<h3>Aucune organisation</h3>
+			<p>Aucune organisation n'est encore référencée.</p>
+		]
+	</div>
+	<//B_organisations>
+
+</div>
+
+<script>
+// Fonction de filtrage des organisations
+function filtrerOrganisations() {
+	const selecteur = document.getElementById('filtre-statut');
+	const statutChoisi = selecteur.value;
+	const organisations = document.querySelectorAll('.organisation-row');
+
+	organisations.forEach(function(orga) {
+		const statutOrga = orga.getAttribute('data-statut');
+
+		if (statutChoisi === '' || statutOrga === statutChoisi) {
+			orga.style.display = 'table-row';
+		} else {
+			orga.style.display = 'none';
+		}
+	});
+
+	// Mettre à jour le compteur visible
+	const organisationsVisibles = document.querySelectorAll('.organisation-row[style="display: table-row"], .organisation-row:not([style*="display: none"])');
+	const compteur = document.querySelector('.nb-organisations');
+	if (compteur) {
+		const nb = organisationsVisibles.length;
+		compteur.textContent = nb + (nb > 1 ? ' organisations affichées' : ' organisation affichée');
+	}
+}
+
+// Recherche en temps réel
+document.addEventListener('DOMContentLoaded', function() {
+	const champRecherche = document.getElementById('recherche-orga');
+
+	if (champRecherche) {
+		let timeoutRecherche;
+
+		champRecherche.addEventListener('input', function() {
+			clearTimeout(timeoutRecherche);
+			const terme = this.value.toLowerCase().trim();
+
+			timeoutRecherche = setTimeout(function() {
+				const organisations = document.querySelectorAll('.organisation-row');
+
+				organisations.forEach(function(orga) {
+					const nom = orga.querySelector('.col-nom').textContent.toLowerCase();
+					const statut = orga.querySelector('.col-statut').textContent.toLowerCase();
+					const email = orga.querySelector('.col-email').textContent.toLowerCase();
+
+					if (terme === '' || nom.includes(terme) || statut.includes(terme) || email.includes(terme)) {
+						orga.style.display = 'table-row';
+					} else {
+						orga.style.display = 'none';
+					}
+				});
+			}, 300);
+		});
+	}
+});
+</script>
+
+[(#ENV{id_organisation}|oui)
+<BOUCLE_organisation_principale(ORGANISATIONS){id_organisation}>
+<div class="contenu-organisation-detail">
+	<div class="organisation-header">
+		<div class="organisation-logo">
+			[(#LOGO_ORGANISATION|image_reduire{150,150}|sinon{
+				<div class="logo-placeholder-large">
+					<svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+						<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+					</svg>
+				</div>
+			})]
+		</div>
+		<div class="organisation-titre">
+			<h1>#NOM</h1>
+			[(#STATUT_JURIDIQUE|oui)<div class="organisation-statut">#STATUT_JURIDIQUE</div>]
+			[(#AUTORISER{modifier, organisation, #ID_ORGANISATION}|oui)
+				<div class="organisation-actions">
+					<a href="[(#URL_PAGE{modifier_organisation}|parametre_url{id_organisation,#ID_ORGANISATION})]" class="btn btn-warning btn-icon">
+						<i class="fa fa-pencil"></i> <:contacts:modifier_organisation:>
+					</a>
+				</div>
+			]
+		</div>
+	</div>
+
+	<div class="organisation-details">
+		<div class="organisation-fiche">
+			<h2>Informations de l'organisation</h2>
+			<div class="organisation-info-grid">
+				[(#EMAIL|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Email</div>
+					<div class="organisation-info-value">
+						<a href="mailto:#EMAIL">#EMAIL</a>
+					</div>
+				</div>
+				]
+				[(#TELEPHONE|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Téléphone</div>
+					<div class="organisation-info-value">
+						<a href="tel:#TELEPHONE">#TELEPHONE</a>
+					</div>
+				</div>
+				]
+				[(#FAX|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Fax</div>
+					<div class="organisation-info-value">#FAX</div>
+				</div>
+				]
+				[(#STATUT_JURIDIQUE|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Statut juridique</div>
+					<div class="organisation-info-value">#STATUT_JURIDIQUE</div>
+				</div>
+				]
+				[(#IDENTIFICATION|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Numéro d'identification</div>
+					<div class="organisation-info-value">#IDENTIFICATION</div>
+				</div>
+				]
+				[(#ACTIVITE|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Activité</div>
+					<div class="organisation-info-value">#ACTIVITE</div>
+				</div>
+				]
+				[(#URL_SITE|oui)
+				<div class="organisation-info-item">
+					<div class="organisation-info-label">Site web</div>
+					<div class="organisation-info-value">
+						<a href="#URL_SITE" target="_blank">#URL_SITE</a>
+					</div>
+				</div>
+				]
+			</div>
+		</div>
+
+		<div class="organisation-adresse">
+			<h2>Adresse</h2>
+			[(#ADRESSE|ou{#CODE_POSTAL}|ou{#VILLE}|ou{#PAYS}|oui)
+			<div class="adresse-complete">
+				[(#ADRESSE|oui)<div class="adresse-rue">#ADRESSE</div>]
+				[(#CODE_POSTAL|oui|ou{#VILLE|oui})<div class="adresse-ville">[(#CODE_POSTAL) ]#VILLE</div>]
+				[(#PAYS|oui)<div class="adresse-pays">#PAYS</div>]
+				[(#ADRESSE|et{#CODE_POSTAL}|et{#VILLE}|oui)
+					<div class="adresse-map">
+						<a href="https://www.google.com/maps/search/?api=1&query=[(#ADRESSE|rawurlencode)]+[(#CODE_POSTAL|rawurlencode)]+[(#VILLE|rawurlencode)]" target="_blank" class="btn btn-primary btn-voir-carte">
+							Voir sur la carte
+						</a>
+					</div>
+				]
+			</div>
+			]
+			[(#ADRESSE|non|et{#CODE_POSTAL|non}|et{#VILLE|non}|et{#PAYS|non})
+				<p>Aucune adresse renseignée</p>
+			]
+		</div>
+
+		<div class="organisation-contacts">
+			<h2>Contacts</h2>
+			<B_contacts>
+			<div class="tableau-contacts-container">
+				<table class="tableau-contacts-orga table table-striped table-hover">
+					<thead>
+						<tr>
+							<th class="col-photo">Photo</th>
+							<th class="col-nom">Nom</th>
+							<th class="col-fonction">Fonction</th>
+							<th class="col-email">Email</th>
+							<th class="col-telephone">Téléphone</th>
+							<th class="col-actions">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<BOUCLE_contacts(CONTACTS){id_organisation}{par nom}>
+							<tr class="contact-row">
+								<td class="col-photo">
+									[(#LOGO_CONTACT|image_reduire{40,40}|sinon{
+										<div class="photo-placeholder-mini">
+											<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+												<path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+											</svg>
+										</div>
+									})]
+								</td>
+								<td class="col-nom">
+									<a href="[(#ID_CONTACT|generer_url_entite{contact})]">[(#CIVILITE) ]#PRENOM #NOM</a>
+								</td>
+								<td class="col-fonction">
+									[(#FONCTION|sinon{-})]
+								</td>
+								<td class="col-email">
+									[(#EMAIL|oui)
+										<a href="mailto:#EMAIL">#EMAIL</a>
+									]
+									[(#EMAIL|non)-]
+								</td>
+								<td class="col-telephone">
+									[(#TELEPHONE|oui)
+										<a href="tel:#TELEPHONE">#TELEPHONE</a>
+									]
+									[(#MOBILE|et{#TELEPHONE|non}|oui)
+										<a href="tel:#MOBILE">#MOBILE</a>
+									]
+									[(#TELEPHONE|non|et{#MOBILE|non})-]
+								</td>
+								<td class="col-actions">
+									<a href="[(#ID_CONTACT|generer_url_entite{contact})]" class="btn btn-primary btn-sm btn-icon">
+										<i class="fa fa-eye"></i>
+									</a>
+									[(#EMAIL|oui)
+										<a href="mailto:#EMAIL" class="btn btn-info btn-sm btn-icon">
+											<i class="fa fa-envelope"></i>
+										</a>
+									]
+								</td>
+							</tr>
+						</BOUCLE_contacts>
+					</tbody>
+				</table>
+			</div>
+			</B_contacts>
+			<div class="aucun-contact">
+				<p>Aucun contact associé à cette organisation.</p>
+			</div>
+			<//B_contacts>
+		</div>
+
+		[(#CONFIG{contacts_et_organisations/utiliser_organisations_arborescentes}|oui)
+		<div class="organisation-structure">
+			<h2>Structure organisationnelle</h2>
+
+			[(#ID_PARENT|>{0}|oui)
+			<div class="organisation-parent">
+				<h3>Organisation parente</h3>
+				<BOUCLE_parent(ORGANISATIONS){id_organisation=#ID_PARENT}>
+				<div class="organisation-parent-item">
+					<div class="organisation-parent-logo">
+						[(#LOGO_ORGANISATION|image_reduire{60,60}|sinon{
+							<div class="logo-placeholder">
+								<svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+									<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+								</svg>
+							</div>
+						})]
+					</div>
+					<div class="organisation-parent-details">
+						<h4><a href="[(#ID_ORGANISATION|generer_url_entite{organisation})]">#NOM</a></h4>
+						[(#STATUT_JURIDIQUE|oui)<div class="organisation-parent-statut">#STATUT_JURIDIQUE</div>]
+					</div>
+				</div>
+				</BOUCLE_parent>
+			</div>
+			]
+
+			<B_enfants>
+			<div class="organisations-enfants">
+				<h3>Organisations filles</h3>
+				<div class="organisations-enfants-grid">
+					<BOUCLE_enfants(ORGANISATIONS){id_parent=#ID_ORGANISATION}{par nom}>
+					<div class="organisation-enfant-card">
+						<div class="organisation-enfant-header">
+							[(#LOGO_ORGANISATION|image_reduire{60,60}|sinon{
+								<div class="logo-placeholder">
+									<svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+										<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+									</svg>
+								</div>
+							})]
+							<h4><a href="[(#ID_ORGANISATION|generer_url_entite{organisation})]">#NOM</a></h4>
+						</div>
+						<div class="organisation-enfant-body">
+							[(#STATUT_JURIDIQUE|oui)<div class="organisation-enfant-statut">#STATUT_JURIDIQUE</div>]
+							[(#EMAIL|oui)<div class="organisation-enfant-email"><a href="mailto:#EMAIL">#EMAIL</a></div>]
+							[(#TELEPHONE|oui)<div class="organisation-enfant-tel"><a href="tel:#TELEPHONE">#TELEPHONE</a></div>]
+						</div>
+					</div>
+					</BOUCLE_enfants>
+				</div>
+			</div>
+			</B_enfants>
+		</div>
+		]
+
+		[(#TEXTE|oui)
+		<div class="organisation-description">
+			<h2>À propos</h2>
+			<div class="organisation-texte">
+				#TEXTE
+			</div>
+		</div>
+		]
+
+		<div class="organisation-actions">
+			<a href="#URL_PAGE{organisations}" class="btn btn-default btn-retour">Retour à la liste des organisations</a>
+			[(#EMAIL|oui)<a href="mailto:#EMAIL" class="btn btn-info btn-contacter-detail">Contacter</a>]
+		</div>
+	</div>
+</div>
+</BOUCLE_organisation_principale>
+
+<div class="organisation-inexistante">
+	<h1>Organisation introuvable</h1>
+	<p>L'organisation demandée n'existe pas ou n'est plus disponible.</p>
+	<p><a href="#URL_PAGE{organisations}" class="btn btn-default btn-retour">Retour à la liste des organisations</a></p>
+</div>
+<//B_organisation_principale>
+]
+
+[(#ENV{id_organisation}|non)
+<!-- Afficher uniquement la liste des organisations quand on n'est pas sur la page d'une organisation spécifique -->
+]

@@ -1,0 +1,15 @@
+<div class="contenu-modifier-organisation">
+    <h1>[(#ENV{id_organisation}|intval|?{<:contacts:titre_modifier_organisation:>, <:contacts:titre_nouvelle_organisation:>})]</h1>
+
+    <div class="formulaire-container">
+        [(#FORMULAIRE_EDITER_ORGANISATION{#ENV{id_organisation}, #ENV{id_parent}, #SELF})]
+    </div>
+
+    [(#ENV{id_organisation}|intval|oui)
+    <div class="actions-organisation">
+        <a href="[(#URL_PAGE{organisation_detail}|parametre_url{id_organisation,#ENV{id_organisation}})]" class="btn btn-secondary">
+            <i class="fa fa-arrow-left"></i> <:contacts:retour_organisation:>
+        </a>
+    </div>
+    ]
+</div>

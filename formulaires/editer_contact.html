@@ -1,0 +1,59 @@
+[(#ENV{editable}|oui)
+<div class="formulaire_spip formulaire_editer formulaire_editer_contact">
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+
+	[(#ENV{editable})
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		#ACTION_FORMULAIRE{#ENV{action}}
+		<div class="editer-groupe">
+			[(#SAISIE{input, civilite, label=<:contacts:label_civilite:>, class=form-control-sm w-50})]
+			[(#SAISIE{input, prenom, label=<:contacts:label_contact_prenom:>, obligatoire=oui})]
+			[(#SAISIE{input, nom, label=<:contacts:label_contact_nom:>, obligatoire=oui})]
+			[(#SAISIE{input, fonction, label=<:contacts:label_fonction:>})]
+
+			[(#ENV{id_auteur}|oui)
+			<div class="info-auteur-lie">
+				<h3>Compte utilisateur lié</h3>
+				<BOUCLE_auteur_lie(AUTEURS){id_auteur=#ENV{id_auteur}}>
+				<div class="auteur-info">
+					<p>Ce contact est lié au compte utilisateur <strong>#NOM</strong> (#EMAIL)</p>
+					[(#SAISIE{hidden, id_auteur, valeur=#ID_AUTEUR})]
+					<p class="email-notice">L'adresse email sera gérée via le compte utilisateur.</p>
+				</div>
+				</BOUCLE_auteur_lie>
+				<div class="auteur-info">
+					<p class="erreur">Le compte utilisateur lié n'existe plus ou n'est pas accessible.</p>
+					[(#SAISIE{hidden, id_auteur, valeur=#ENV{id_auteur}})]
+				</div>
+				<//B_auteur_lie>
+			</div>
+			]
+
+			[(#ENV{id_auteur}|non)
+			[(#SAISIE{input, email, label=<:contacts:label_email:>})]
+			]
+
+			[(#SAISIE{input, telephone, label=<:contacts:label_telephone:>})]
+			[(#SAISIE{input, mobile, label=<:contacts:label_mobile:>})]
+			[(#SAISIE{input, fax, label=<:contacts:label_fax:>})]
+			[(#SAISIE{date, date_naissance, label=<:contacts:label_date_naissance:>})]
+
+			<h3><:contacts:titre_coordonnees:></h3>
+			[(#SAISIE{input, adresse, label=<:contacts:label_adresse:>, class=w-100})]
+			<div class="form-group-horizontal">
+				[(#SAISIE{input, code_postal, label=<:contacts:label_code_postal:>, class=w-33})]
+				[(#SAISIE{input, ville, label=<:contacts:label_ville:>, class=w-66})]
+			</div>
+			[(#SAISIE{input, pays, label=<:contacts:label_pays:>})]
+
+			[(#SAISIE{organisations_select, organisations, label=<:contacts:label_organisation:>})]
+		</div>
+
+		<div class="boutons">
+			<input type='submit' class='btn btn-primary' name='enregistrer' value='<:bouton_enregistrer:>' />
+		</div>
+	</form>
+	]
+</div>
+]

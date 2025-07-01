@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>[(#NOM_SITE_SPIP|textebrut)][ - (#DESCRIPTIF_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="(#DESCRIPTIF_SITE_SPIP|textebrut)" />]
+
+	#INSERT_HEAD
+</head>
+
+<body class="page-sommaire">
+			<INCLURE{fond=inclure/header}>
+		<!-- Section de recherche principale -->
+		<div class="recherche-principale">
+			<h2>Rechercher sur le site</h2>
+			<div class="recherche-principale-form">
+				<INCLURE{fond=inclure/recherche}>
+			</div>
+		</div>
+		<main id="main" role="main">
+		<div class="container">
+			<section class="contenu">
+
+
+				<!-- Layout en deux colonnes -->
+				<div class="deux-colonnes-layout">
+					<!-- Colonne de gauche: Articles par secteur -->
+					<div class="colonne-gauche">
+						<h3>Articles par secteur</h3>
+						<div class="secteurs-list">
+							<BOUCLE_rubriques(RUBRIQUES){par titre}{pagination 10}>
+								<INCLURE{fond=modeles/rubrique-bloc}{id_rubrique}>
+							</BOUCLE_rubriques>
+						</div>
+					</div>
+
+					<!-- Colonne de droite: Événements à venir -->
+					<div class="colonne-droite">
+						<h3>Prochains événements</h3>
+
+						<B_evenements_prochains>
+						<div class="evenements-list">
+						<BOUCLE_evenements_prochains(EVENEMENTS){evenement_a_venir}{par date_debut}{0,3}{statut=publie}>
+							<article class="evenement-card">
+								<div class="evenement-date-card">
+									<span class="date-jour">[(#DATE_DEBUT|jour)]</span>
+									<span class="date-mois">[(#DATE_DEBUT|nom_mois|couper{3})]</span>
+									<span class="date-annee">[(#DATE_DEBUT|annee)]</span>
+								</div>
+
+								<div class="evenement-contenu-card">
+									<h4><a href="#URL_EVENEMENT">#TITRE</a></h4>
+									[(#HORAIRE|=={oui}|oui)<div class="evenement-heure-card">À [(#DATE_DEBUT|affdate{H\hi})]</div>]
+									[<div class="evenement-lieu-card"> (#LIEU)</div>]
+									[<div class="evenement-intro-card">(#DESCRIPTIF|couper{100})</div>]
+
+									<div class="evenement-actions-card">
+										<a href="#URL_EVENEMENT" class="btn-voir-evenement">Voir les détails</a>
+										[(#INSCRIPTION|=={1}|oui)
+											<a href="#URL_EVENEMENT" class="btn-inscription-mini">S'inscrire</a>
+										]
+									</div>
+								</div>
+							</article>
+						</BOUCLE_evenements_prochains>
+						</div>
+
+						<div class="voir-tous-evenements">
+							<a href="#URL_PAGE{evenements}" class="btn-voir-tous">Voir tous les événements</a>
+						</div>
+						</B_evenements_prochains>
+						<div class="aucun-evenement-sommaire">
+							<p>Aucun événement prévu pour le moment.</p>
+							<p>Consultez régulièrement cette page pour être informé des prochaines activités.</p>
+						</div>
+						<//B_evenements_prochains>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+	<INCLURE{fond=inclure/footer}>	</INCLURE>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<BOUCLE_evenement_head(EVENEMENTS){id_evenement}>
+	<title>Inscription : [(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="(#DESCRIPTIF|textebrut|couper{160})" />]
+	</BOUCLE_evenement_head>
+	#INSERT_HEAD
+</head>
+
+<body class="page-inscription-evenement">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main" class="main-with-spacing">
+		<div class="main-container">
+			<div class="container">
+				<BOUCLE_evenement(EVENEMENTS){id_evenement}>
+				<div class="inscription-page inscription-page--centered">
+
+					<div class="centered-layout">
+						<div class="centered-content">
+
+							<header class="page-header page-header--centered">
+								<h1 class="page-title page-title--centered">Inscription à l'événement</h1>
+								<p class="page-subtitle page-subtitle--centered">Complétez les informations ci-dessous pour vous inscrire</p>
+							</header>
+
+							<section class="event-info event-info--centered" aria-labelledby="event-title">
+								<div class="event-info">
+									<div class="meta-list">
+										<div class="meta-list__item">
+											<div class="meta-list__icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+											</div>
+											<div class="meta-list__content">
+												<span class="meta-list__label">Date et heure</span>
+												<span class="meta-list__value">[(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]</span>
+											</div>
+										</div>
+
+										[<div class="meta-list__item">
+											<div class="meta-list__icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+											</div>
+											<div class="meta-list__content">
+												<span class="meta-list__label">Lieu</span>
+												<span class="meta-list__value">(#LIEU)</span>
+											</div>
+										</div>]
+
+										[<div class="meta-list__item">
+											<div class="meta-list__icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+											</div>
+											<div class="meta-list__content">
+												<span class="meta-list__label">Adresse</span>
+												<span class="meta-list__value">(#ADRESSE|PtoBR)</span>
+											</div>
+										</div>]
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<section class="inscription-form-section inscription-form-section--centered" aria-labelledby="form-title">
+								<header class="form-header form-header--centered">
+									<p class="form-description form-description--centered">Les champs marqués d'un astérisque (*) sont obligatoires</p>
+								</header>
+
+								<div class="form-container form-container--centered">
+									#FORMULAIRE_INSCRIPTION_EVENEMENT{#ID_EVENEMENT}
+								</div>
+							</section>
+							<div class="page-actions page-actions--centered">
+								<a href="#URL_EVENEMENT" class="btn btn--secondary btn--with-icon btn--centered">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+										<line x1="19" y1="12" x2="5" y2="12"></line>
+										<polyline points="12 19 5 12 12 5"></polyline>
+									</svg>
+									<span>Retour aux détails de l'événement</span>
+								</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				</BOUCLE_evenement>
+
+				<div class="event-error event-error--centered">
+					<div class="centered-layout">
+						<div class="centered-content">
+							<div class="error-card error-card--centered">
+								<header class="error-card__header error-card__header--centered">
+									<h1 class="error-card__title error-card__title--centered">Événement non trouvé</h1>
+								</header>
+								<div class="error-card__body error-card__body--centered">
+									<p class="error-card__message error-card__message--centered">L'événement que vous recherchez n'existe pas ou n'est plus disponible pour les inscriptions.</p>
+									<div class="error-card__actions error-card__actions--centered">
+										<a href="[(#URL_PAGE{evenements})]" class="btn btn--primary btn--centered">Voir tous les événements</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<//B_evenement>
+			</div>
+		</div>
+	</main>
+
+	<INCLURE{fond=inclure/footer}>
+</body>
+</html>

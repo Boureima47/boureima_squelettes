@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>[(#ENV{recherche}|?{Recherche : #ENV{recherche},Recherche})] - [(#NOM_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="Résultats de recherche pour : (#ENV{recherche}|textebrut)" />]
+
+	#INSERT_HEAD
+</head>
+
+<body class="page-recherche">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main">
+		<div class="container">
+			<INCLURE{fond=pages/recherche}{env}>
+		</div>
+	</main>
+
+	<INCLURE{fond=inclure/footer}>
+</body>
+</html>

@@ -1,0 +1,40 @@
+[(#ENV{editable}|oui)
+<div class="formulaire_spip formulaire_editer formulaire_editer_organisation">
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+
+	[(#ENV{editable})
+	<form method='post' action='#ENV{action}' enctype='multipart/form-data'>
+		#ACTION_FORMULAIRE{#ENV{action}}
+		<div class="editer-groupe">
+			[(#SAISIE{input, nom, label=<:contacts:label_organisation_nom:>, obligatoire=oui})]
+			[(#SAISIE{input, statut_juridique, label=<:contacts:label_statut_juridique:>, explication=<:contacts:explication_statut_juridique:>, class=w-50})]
+			[(#SAISIE{input, identification, label=<:contacts:label_identification:>, explication=<:contacts:explication_identification:>})]
+			[(#SAISIE{input, activite, label=<:contacts:label_activite:>, explication=<:contacts:explication_activite:>})]
+			[(#SAISIE{input, url_site, label=<:contacts:label_url_site:>, placeholder=https://…})]
+			[(#SAISIE{input, email, label=<:contacts:label_email:>})]
+			[(#SAISIE{input, telephone, label=<:contacts:label_telephone:>})]
+			[(#SAISIE{input, fax, label=<:contacts:label_fax:>})]
+
+			[(#SAISIE{date, date_creation, label=<:contacts:label_date_creation:>})]
+
+			<h3><:contacts:titre_coordonnees:></h3>
+			[(#SAISIE{input, adresse, label=<:contacts:label_adresse:>, class=w-100})]
+			<div class="form-group-horizontal">
+				[(#SAISIE{input, code_postal, label=<:contacts:label_code_postal:>, class=w-33})]
+				[(#SAISIE{input, ville, label=<:contacts:label_ville:>, class=w-66})]
+			</div>
+			[(#SAISIE{input, pays, label=<:contacts:label_pays:>})]
+
+			<h3><:contacts:titre_informations_supplementaires:></h3>
+			[(#SAISIE{textarea, ouvertures, label=<:contacts:label_ouvertures:>, explication=<:contacts:explication_ouvertures:>, class='inserer_barre_edition', rows=5})]
+			[(#SAISIE{textarea, tarifs, label=<:contacts:label_tarifs:>, class='inserer_barre_edition', rows=5})]
+		</div>
+
+		<div class="boutons">
+			<input type='submit' class='btn btn-primary' name='enregistrer' value='<:bouton_enregistrer:>' />
+		</div>
+	</form>
+	]
+</div>
+]

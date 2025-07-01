@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>[(#ENV{id_contact}|intval|?{<:contacts:titre_modifier_contact:>, <:contacts:titre_nouveau_contact:>})] - [(#NOM_SITE_SPIP|textebrut)]</title>
+	#INSERT_HEAD
+</head>
+
+<body class="page-modifier-contact">
+	<INCLURE{fond=inclure/header, env}>
+
+	<div class="container">
+		<div id="main" role="main">
+			<div class="main-container">
+				<div class="contenu-modifier-contact">
+					<h1>[(#ENV{id_contact}|intval|?{<:contacts:titre_modifier_contact:>, <:contacts:titre_nouveau_contact:>})]</h1>
+
+					<div class="formulaire-container">
+						[(#FORMULAIRE_EDITER_CONTACT{#ENV{id_contact}, #ENV{id_organisation}, #SELF})]
+					</div>
+
+					[(#ENV{id_contact}|intval|oui)
+					<div class="actions-contact">
+						<a href="[(#URL_PAGE{contact_detail}|parametre_url{id_contact,#ENV{id_contact}})]" class="btn btn-secondary btn-icon">
+							<i class="fa fa-arrow-left"></i> <:contacts:retour_contact:>
+						</a>
+					</div>
+					]
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<INCLURE{fond=inclure/footer, env}>
+</body>
+</html>

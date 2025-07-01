@@ -1,0 +1,254 @@
+<div class="contenu-contacts">
+	<!-- Bouton pour créer un nouveau contact -->
+	<!-- [(#AUTORISER{creer, contact}|oui)
+	<div class="actions-contacts">
+		<a href="[(#URL_PAGE{modifier_contact})]" class="btn btn-success btn-icon">
+			<i class="fa fa-plus"></i> <:contacts:creer_contact:>
+		</a>
+	</div>
+	] -->
+
+	<!-- Tableau des contacts -->
+	<B_contacts>
+	<div class="tableau-contacts-container">
+		<table class="tableau-contacts table table-striped table-hover">
+			<thead>
+				<tr>
+					<th class="col-photo">Photo</th>
+					<th class="col-nom">Nom</th>
+					<th class="col-fonction">Fonction</th>
+					<th class="col-organisation">Organisation</th>
+					<th class="col-email">Email</th>
+					<th class="col-telephone">Téléphone</th>
+				</tr>
+			</thead>
+			<tbody>
+				<BOUCLE_contacts(CONTACTS){recherche?}{id_organisation?}{fonction?}{par nom}{pagination 20}>
+					<tr class="contact-row" data-fonction="#FONCTION" data-organisation="#ORGANISATIONS">
+						<td class="col-photo">
+							[(#LOGO_CONTACT|image_reduire{40,40}|sinon{
+								<div class="photo-placeholder-mini">
+									<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+										<path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+									</svg>
+								</div>
+							})]
+						</td>
+						<td class="col-nom">
+							<a href="[(#URL_PAGE{contact_detail}|parametre_url{id_contact,#ID_CONTACT})]">[(#CIVILITE) ]#PRENOM #NOM</a>
+						</td>
+						<td class="col-fonction">
+							[(#FONCTION|sinon{-})]
+						</td>
+						<td class="col-organisation">
+							#ORGANISATIONS
+						</td>
+						<td class="col-email">
+							<BOUCLE_auteur_email(AUTEURS){id_auteur}>
+							[(#EMAIL|oui)
+								<a href="mailto:#EMAIL">#EMAIL</a>
+							]
+							</BOUCLE_auteur_email>
+							[(#EMAIL|oui)
+								<a href="mailto:#EMAIL">#EMAIL</a>
+							]
+							<//B_auteur_email>
+							[(#ID_AUTEUR|non|et{#EMAIL|non})-]
+						</td>
+						<td class="col-telephone">
+							[(#TELEPHONE|oui)
+								<a href="tel:#TELEPHONE">#TELEPHONE</a>
+							]
+							[(#MOBILE|et{#TELEPHONE|non}|oui)
+								<a href="tel:#MOBILE">#MOBILE</a>
+							]
+							[(#TELEPHONE|non|et{#MOBILE|non})-]
+						</td>
+					</td>
+					</tr>
+				</BOUCLE_contacts>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Pagination -->
+	[<nav class="pagination-contacts">(#PAGINATION{precedent_suivant})</nav>]
+
+	</B_contacts>
+	<div class="aucun-contact">
+		[(#ENV{recherche}|oui)
+			<h3>Aucun contact trouvé</h3>
+			<p>Votre recherche "[(#ENV{recherche}|entites_html)]" n'a donné aucun résultat.</p>
+		]
+		[(#ENV{recherche}|non)
+			<h3>Aucun contact</h3>
+			<p>Aucun contact n'est encore référencé.</p>
+		]
+	</div>
+	<//B_contacts>
+
+</div>
+
+
+[(#ENV{id_contact}|oui)
+<BOUCLE_contact_principal(CONTACTS){id_contact}>
+<div class="contenu-contact-detail">
+	<div class="contact-header">
+		<div class="contact-photo">
+			[(#LOGO_CONTACT|image_reduire{150,150}|sinon{
+				<div class="photo-placeholder-large">
+					<svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+						<path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+					</svg>
+				</div>
+			})]
+		</div>
+		<div class="contact-titre">
+			<h1>[(#CIVILITE) ]#PRENOM #NOM</h1>
+			[(#FONCTION|oui)<div class="contact-fonction">#FONCTION</div>]
+			[(#AUTORISER{modifier, contact, #ID_CONTACT}|oui)
+				<div class="contact-actions">
+					<a href="[(#URL_PAGE{modifier_contact}|parametre_url{id_contact,#ID_CONTACT})]" class="btn btn-warning">
+						<i class="fa fa-pencil"></i> <:contacts:modifier_contact:>
+					</a>
+				</div>
+			]
+		</div>
+	</div>
+
+	<div class="contact-details">
+		<div class="contact-fiche">
+			<h2>Informations de contact</h2>
+			<div class="contact-info-grid">
+				<BOUCLE_auteur_detail(AUTEURS){id_auteur}>
+				[(#EMAIL|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Email</div>
+					<div class="contact-info-value">
+						<a href="mailto:#EMAIL">#EMAIL</a>
+					</div>
+				</div>
+				]
+				</BOUCLE_auteur_detail>
+				[(#EMAIL|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Email</div>
+					<div class="contact-info-value">
+						<a href="mailto:#EMAIL">#EMAIL</a>
+					</div>
+				</div>
+				]
+				<//B_auteur_detail>
+				[(#TELEPHONE|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Téléphone</div>
+					<div class="contact-info-value">
+						<a href="tel:#TELEPHONE">#TELEPHONE</a>
+					</div>
+				</div>
+				]
+				[(#MOBILE|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Mobile</div>
+					<div class="contact-info-value">
+						<a href="tel:#MOBILE">#MOBILE</a>
+					</div>
+				</div>
+				]
+				[(#FAX|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Fax</div>
+					<div class="contact-info-value">#FAX</div>
+				</div>
+				]
+				[(#FONCTION|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Fonction</div>
+					<div class="contact-info-value">#FONCTION</div>
+				</div>
+				]
+				[(#CIVILITE|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Civilité</div>
+					<div class="contact-info-value">#CIVILITE</div>
+				</div>
+				]
+				[(#ID_AUTEUR|oui)
+				<div class="contact-info-item">
+					<div class="contact-info-label">Compte utilisateur</div>
+					<div class="contact-info-value">
+						<BOUCLE_auteur_statut(AUTEURS){id_auteur}>
+						<span class="badge badge-[(#STATUT|match{^0}|?{secondary,primary})]">
+							[(#STATUT|match{^0}|?{Compte en attente,Compte actif})]
+						</span>
+						</BOUCLE_auteur_statut>
+					</div>
+				</div>
+				]
+			</div>
+		</div>
+
+		<div class="contact-organisations">
+			<h2>Organisations</h2>
+			<B_orgs>
+			<div class="contact-orgs-liste">
+				<BOUCLE_orgs(ORGANISATIONS){id_contact}{par nom}>
+				<div class="contact-org-item">
+					<div class="contact-org-logo">
+						[(#LOGO_ORGANISATION|image_reduire{60,60}|sinon{
+							<div class="logo-placeholder">
+								<svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+									<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+								</svg>
+							</div>
+						})]
+					</div>
+					<div class="contact-org-details">
+						<h3><a href="[(#URL_PAGE{organisation_detail}|parametre_url{id_organisation,#ID_ORGANISATION})]">#NOM</a></h3>
+						[(#STATUT_JURIDIQUE|oui)<div class="contact-org-statut">#STATUT_JURIDIQUE</div>]
+						[(#EMAIL|oui)<div class="contact-org-email"><a href="mailto:#EMAIL">#EMAIL</a></div>]
+						[(#TELEPHONE|oui)<div class="contact-org-tel"><a href="tel:#TELEPHONE">#TELEPHONE</a></div>]
+					</div>
+				</div>
+				</BOUCLE_orgs>
+			</div>
+			</B_orgs>
+			<div class="aucune-organisation">
+				<p>Ce contact n'est associé à aucune organisation.</p>
+			</div>
+			<//B_orgs>
+		</div>
+
+		[(#TEXTE|oui)
+		<div class="contact-description">
+			<h2>À propos</h2>
+			<div class="contact-texte">
+				#TEXTE
+			</div>
+		</div>
+		]
+
+		<div class="contact-actions">
+			<a href="#URL_PAGE{contacts}" class="btn btn-default btn-retour">Retour à la liste des contacts</a>
+			<BOUCLE_auteur_email_action(AUTEURS){id_auteur}>
+			[(#EMAIL|oui)<a href="mailto:#EMAIL" class="btn btn-info btn-contacter-detail">Contacter</a>]
+			</BOUCLE_auteur_email_action>
+			[(#EMAIL|oui)<a href="mailto:#EMAIL" class="btn btn-info btn-contacter-detail">Contacter</a>]
+			<//B_auteur_email_action>
+		</div>
+	</div>
+</div>
+
+</BOUCLE_contact_principal>
+
+<div class="contact-inexistant">
+	<h1>Contact introuvable</h1>
+	<p>Le contact demandé n'existe pas ou n'est plus disponible.</p>
+	<p><a href="#URL_PAGE{contacts}" class="btn btn-default btn-retour">Retour à la liste des contacts</a></p>
+</div>
+<//B_contact_principal>
+]
+
+[(#ENV{id_contact}|non)
+<!-- Afficher uniquement la liste des contacts quand on n'est pas sur la page d'un contact spécifique -->
+]

@@ -1,0 +1,62 @@
+<BOUCLE_article_principal(ARTICLES){id_article}>
+<div class="contenu-article">
+	<header class="article-header">
+		[(#LOGO_ARTICLE|oui)
+		<div class="article-card-image">
+			<a href="#URL_ARTICLE">
+				[(#LOGO_ARTICLE|image_reduire{300,200}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+			</a>
+		</div>
+		]
+		<h2>#TITRE</h2>
+		[<div class="date">Publié le (#DATE|affdate)</div>]
+		[<div class="auteur">Par (#LESAUTEURS)</div>]
+		[<div class="rubrique">Dans <a href="#URL_RUBRIQUE">(#TITRE{rubrique})</a></div>]
+	</header>
+
+	[<div class="chapo">(#CHAPO)</div>]
+
+	<div class="texte">
+		#TEXTE
+	</div>
+
+	[<div class="ps">(#PS)</div>]
+	<!-- Documents joints -->
+	<INCLURE{fond=inclure/article_documents}>
+
+	<nav class="navigation-articles">
+		<BOUCLE_article_precedent(ARTICLES)
+			{id_rubrique}
+			{id_article < #ID_ARTICLE}
+			{par date}
+			{inverse}
+			{0,1}>
+			<a href="#URL_ARTICLE" class="precedent">
+				<span class="nav-label">&larr; Article précédent</span>
+				<span class="nav-titre">#TITRE</span>
+			</a>
+		</BOUCLE_article_precedent>
+
+		<BOUCLE_article_suivant(ARTICLES)
+			{id_rubrique}
+			{id_article > #ID_ARTICLE}
+			{par date}
+			{0,1}>
+			<a href="#URL_ARTICLE" class="suivant">
+				<span class="nav-label">Article suivant &rarr;</span>
+				<span class="nav-titre">#TITRE</span>
+			</a>
+		</BOUCLE_article_suivant>
+	</nav>
+</div>
+</BOUCLE_article_principal>
+
+<div class="article-inexistant">
+	<h2>Article non trouvé</h2>
+	<p>L'article que vous recherchez n'existe pas ou n'est plus disponible.</p>
+	<p>Vous pouvez consulter nos autres articles ou revenir à la page d'accueil.</p>
+	<div class="actions">
+		<a href="#URL_SITE_SPIP" class="btn-retour">Retour à l'accueil</a>
+	</div>
+</div>
+<//B_article_principal>

@@ -1,0 +1,42 @@
+<B_pagination>
+<nav class="pagination" aria-label="Navigation des pages">
+	<ul class="pagination-list">
+		<!-- Page précédente -->
+		<BOUCLE_pagination(PAGINATION){id_pagination}>
+			<B_prev>
+			<li class="pagination-item">
+				<a href="#URL_PAGE" class="pagination-link pagination-prev" aria-label="Page précédente">
+					<span aria-hidden="true">←</span> Précédent
+				</a>
+			</li>
+			</B_prev>
+
+			<!-- Pages numérotées -->
+			<B_pages>
+			<li class="pagination-item">
+				<a href="#URL_PAGE" class="pagination-link[ (#ENV{page}|=={#COMPTEUR_BOUCLE}|?{pagination-current})]">
+					#COMPTEUR_BOUCLE
+				</a>
+			</li>
+			</B_pages>
+
+			<!-- Page suivante -->
+			<B_next>
+			<li class="pagination-item">
+				<a href="#URL_PAGE" class="pagination-link pagination-next" aria-label="Page suivante">
+					Suivant <span aria-hidden="true">→</span>
+				</a>
+			</li>
+			</B_next>
+		</BOUCLE_pagination>
+	</ul>
+
+	<!-- Informations sur la pagination -->
+	<div class="pagination-info">
+		<span class="pagination-text">
+			Page #ENV{page} sur #ENV{nombre_pages}
+			(#ENV{debut} à #ENV{fin} sur #ENV{total} éléments)
+		</span>
+	</div>
+</nav>
+</B_pagination>

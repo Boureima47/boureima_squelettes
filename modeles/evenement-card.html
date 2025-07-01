@@ -1,0 +1,66 @@
+<BOUCLE_evenement(EVENEMENTS){id_evenement}>
+<article class="evenement-card">
+	<div class="evenement-card-date">
+		<div class="evenement-date-jour">[(#DATE_DEBUT|jour)]</div>
+		<div class="evenement-date-mois">[(#DATE_DEBUT|nom_mois|couper{3})]</div>
+		<div class="evenement-date-annee">[(#DATE_DEBUT|annee)]</div>
+	</div>
+
+	<div class="evenement-card-content">
+		<div class="evenement-card-header">
+			<h3 class="evenement-card-title">
+				<a href="#URL_EVENEMENT">#TITRE</a>
+			</h3>
+			<span class="evenement-card-status status-#ENV{status,default}">#ENV{status_label,Événement}</span>
+		</div>
+
+		[(#LOGO_EVENEMENT|oui)
+		<div class="evenement-card-image">
+			<a href="#URL_EVENEMENT">
+				[(#LOGO_EVENEMENT|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+			</a>
+		</div>
+		]
+		[(#LOGO_EVENEMENT|non)
+		<BOUCLE_documents(DOCUMENTS){id_evenement}{extension IN jpg,png,gif}{0,1}>
+		<div class="evenement-card-image">
+			<a href="#URL_EVENEMENT">
+				[(#FICHIER|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+			</a>
+		</div>
+		</BOUCLE_documents>
+		<//B_documents>
+		]
+
+		[<div class="evenement-card-description">
+			(#DESCRIPTIF|couper{200})
+		</div>]
+
+		<div class="evenement-card-meta">
+			[(#HORAIRE|=={oui}|oui)
+			<div class="evenement-card-heure">
+				<strong>Horaire :</strong> [(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]
+			</div>
+			]
+			[<div class="evenement-card-lieu">
+				<strong>Lieu :</strong> 📍 (#LIEU)
+			</div>]
+			[<div class="evenement-card-adresse">
+				<strong>Adresse :</strong> (#ADRESSE|PtoBR)
+			</div>]
+			[(#INSCRIPTION|=={1}|oui)
+			<div class="evenement-card-inscription">
+				<strong>Inscription :</strong> Ouverte [(#PLACES|>{0}|oui) (#NB_INSCRITS/#PLACES places)]
+			</div>
+			]
+		</div>
+
+		<div class="evenement-card-actions">
+			<a href="#URL_EVENEMENT" class="btn-voir-evenement">Voir les détails</a>
+			[(#INSCRIPTION|=={1}|oui)
+				<a href="#URL_EVENEMENT" class="btn-inscription">S'inscrire</a>
+			]
+		</div>
+	</div>
+</article>
+</BOUCLE_evenement>

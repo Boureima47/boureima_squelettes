@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<BOUCLE_article_head(ARTICLES){id_article}>
+		<title>[(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+		[<meta name="description" content="(#INTRODUCTION|textebrut|couper{160})" />]
+	</BOUCLE_article_head>
+	#INSERT_HEAD
+</head>
+
+<body class="page-article">
+	<INCLURE{fond=inclure/header}>
+		<main id="main" role="main">
+		<div class="container">
+			<div class="contenu">
+				<INCLURE{fond=content/article}{env}>
+			</div>
+		</div>
+	</main>
+
+	<INCLURE{fond=inclure/footer}></INCLURE>
+</body>
+</html>

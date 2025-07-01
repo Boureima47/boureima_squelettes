@@ -1,0 +1,29 @@
+[(#REM)
+  Surcharge du formulaire de recherche SPIP
+  Paramètres :
+    - action : URL où poster le formulaire, par défaut #ENV{action}
+    - placeholder : texte du placeholder, par défaut "Rechercher"
+    - class : classe CSS à ajouter au formulaire
+]
+
+<div class="formulaire_spip formulaire_recherche[ (#ENV{class})]" id="formulaire_recherche">
+  <form action="[(#ENV{action}|sinon{#URL_PAGE{recherche}})]" method="get" class="form-recherche">
+    [(#ENV{action}|non)
+      <input type="hidden" name="page" value="recherche" />
+    ]
+    <div class="recherche-container">
+      <input type="search"
+             class="search text"
+             name="recherche"
+             id="recherche"
+             placeholder="[(#ENV{placeholder}|sinon{Rechercher sur le site...})]"
+             aria-label="Rechercher sur le site"
+             [(#ENV{recherche}|?{value="(#ENV{recherche}|attribut_html)",value=""})] />
+      <button type="submit" class="recherche-submit" aria-label="Lancer la recherche">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>

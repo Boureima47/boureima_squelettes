@@ -1,0 +1,16 @@
+	<B_documents>
+	<div class="documents-joints">
+		<h3>Documents joints</h3>
+		<ul class="liste-documents">
+		<BOUCLE_documents(DOCUMENTS){id_article}{mode=document}>
+			<li>
+				<a href="#URL_DOCUMENT" class="document-lien" download>
+					<span class="document-titre">#TITRE</span>
+					[<span class="document-type">(#EXTENSION|strtoupper)</span>]
+					[<span class="document-taille">(#TAILLE|taille_en_octets)</span>]
+				</a>
+			</li>
+		</BOUCLE_documents>
+		</ul>
+	</div>
+	</B_documents>

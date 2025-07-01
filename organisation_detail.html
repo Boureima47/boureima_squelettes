@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><BOUCLE_titre(ORGANISATIONS){id_organisation}>#NOM</BOUCLE_titre> - [(#NOM_SITE_SPIP|textebrut)]</title>
+	#INSERT_HEAD
+</head>
+
+<body class="page-organisation-detail">
+	<INCLURE{fond=inclure/header, env}>
+
+	<div class="container">
+		<div id="main" role="main">
+			<div class="main-container">
+				<BOUCLE_organisation(ORGANISATIONS){id_organisation}>
+				<div class="contenu-organisation-detail">
+					<div class="organisation-header">
+						<div class="organisation-logo">
+							[(#LOGO_ORGANISATION|image_reduire{150,150}|sinon{
+								<div class="logo-placeholder-large">
+									<svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+										<path d="M3 21V5a2 2 0 012-2h14a2 2 0 012 2v16m-5-10v10m-4-10v10M7 21V11" stroke="currentColor" stroke-width="2"/>
+									</svg>
+								</div>
+							})]
+						</div>
+						<div class="organisation-titre">
+							<h1>#NOM</h1>
+							[(#STATUT_JURIDIQUE|oui)<div class="organisation-statut">#STATUT_JURIDIQUE</div>]
+							[(#AUTORISER{modifier, organisation, #ID_ORGANISATION}|oui)
+								<div class="organisation-actions">
+									<a href="[(#URL_PAGE{modifier_organisation}|parametre_url{id_organisation,#ID_ORGANISATION})]" class="btn btn-warning btn-icon">
+										<i class="fa fa-pencil"></i> <:contacts:modifier_organisation:>
+									</a>
+								</div>
+							]
+						</div>
+					</div>
+
+					<div class="organisation-details">
+						<div class="organisation-fiche">
+							<h2>Informations de l'organisation</h2>
+							<div class="organisation-info-grid">
+								[(#EMAIL|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Email</div>
+									<div class="organisation-info-value">
+										<a href="mailto:#EMAIL">#EMAIL</a>
+									</div>
+								</div>
+								]
+								[(#TELEPHONE|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Téléphone</div>
+									<div class="organisation-info-value">
+										<a href="tel:#TELEPHONE">#TELEPHONE</a>
+									</div>
+								</div>
+								]
+								[(#FAX|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Fax</div>
+									<div class="organisation-info-value">#FAX</div>
+								</div>
+								]
+								[(#STATUT_JURIDIQUE|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Statut juridique</div>
+									<div class="organisation-info-value">#STATUT_JURIDIQUE</div>
+								</div>
+								]
+								[(#IDENTIFICATION|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Numéro d'identification</div>
+									<div class="organisation-info-value">#IDENTIFICATION</div>
+								</div>
+								]
+								[(#ACTIVITE|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Activité</div>
+									<div class="organisation-info-value">#ACTIVITE</div>
+								</div>
+								]
+								[(#URL_SITE|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Site web</div>
+									<div class="organisation-info-value">
+										<a href="#URL_SITE" target="_blank">#URL_SITE</a>
+									</div>
+								</div>
+								]
+								[(#DATE_CREATION|oui)
+								<div class="organisation-info-item">
+									<div class="organisation-info-label">Date de création</div>
+									<div class="organisation-info-value">[(#DATE_CREATION|affdate)]</div>
+								</div>
+								]
+							</div>
+						</div>
+
+						[(#ADRESSE|ou{#CODE_POSTAL}|ou{#VILLE}|ou{#PAYS}|oui)
+						<div class="organisation-adresse">
+							<h2>Adresse</h2>
+							<div class="adresse-complete">
+								[(#ADRESSE|oui)<div class="adresse-rue">#ADRESSE</div>]
+								[(#CODE_POSTAL|oui|ou{#VILLE|oui})<div class="adresse-ville">[(#CODE_POSTAL) ]#VILLE</div>]
+								[(#PAYS|oui)<div class="adresse-pays">#PAYS</div>]
+							</div>
+						</div>
+						]
+
+						<B_contacts_org>
+						<div class="organisation-contacts">
+							<h2>Contacts de l'organisation</h2>
+							<table class="table table-striped table-contacts">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Fonction</th>
+										<th>Email</th>
+										<th>Téléphone</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<BOUCLE_contacts_org(CONTACTS){id_organisation}>
+									<tr>
+										<td>
+											<a href="[(#URL_PAGE{contact_detail}|parametre_url{id_contact,#ID_CONTACT})]">
+												[(#CIVILITE) ]#PRENOM #NOM
+											</a>
+										</td>
+										<td>[(#FONCTION|sinon{-})]</td>
+										<td>
+											[(#EMAIL|oui)<a href="mailto:#EMAIL">#EMAIL</a>]
+											[(#EMAIL|non)-]
+										</td>
+										<td>
+											[(#TELEPHONE|oui)<a href="tel:#TELEPHONE">#TELEPHONE</a>]
+											[(#MOBILE|et{#TELEPHONE|non}|oui)<a href="tel:#MOBILE">#MOBILE</a>]
+											[(#TELEPHONE|non|et{#MOBILE|non})-]
+										</td>
+										<td>
+											<a href="[(#URL_PAGE{contact_detail}|parametre_url{id_contact,#ID_CONTACT})]" class="btn btn-sm btn-primary btn-icon">
+												<i class="fa fa-eye"></i> Voir
+											</a>
+										</td>
+									</tr>
+									</BOUCLE_contacts_org>
+								</tbody>
+							</table>
+						</div>
+						</B_contacts_org>
+					</div>
+
+					<div class="organisation-actions-bottom">
+						<a href="[(#URL_PAGE{organisations})]" class="btn btn-secondary btn-icon">
+							<i class="fa fa-arrow-left"></i> Retour à la liste des organisations
+						</a>
+						[(#URL_SITE|oui)
+						<a href="#URL_SITE" target="_blank" class="btn btn-outline-primary btn-icon">
+							<i class="fa fa-globe"></i> Visiter le site web
+						</a>
+						]
+					</div>
+				</div>
+				</BOUCLE_organisation>
+				<div class="organisation-inexistante">
+					<h2>Organisation non trouvée</h2>
+					<p>L'organisation demandée n'existe pas ou n'est plus disponible.</p>
+					<a href="[(#URL_PAGE{organisations})]" class="btn btn-primary btn-icon">
+						<i class="fa fa-list"></i> Retour à la liste des organisations
+					</a>
+				</div>
+				<//B_organisation>
+			</div>
+		</div>
+	</div>
+
+	<INCLURE{fond=inclure/footer, env}>
+</body>
+</html>

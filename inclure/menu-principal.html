@@ -1,0 +1,53 @@
+<nav class="menu-principal-container" role="navigation" aria-label="Menu principal">
+	<ul class="menu-principal">
+		<li class="menu-item[ (#ENV{page}|=={sommaire}|?{menu-item-active})]">
+			<a href="#URL_SITE_SPIP"[ class="(#ENV{page}|=={sommaire}|?{current})"] aria-current="(#ENV{page}|=={sommaire}|?{page})">
+				Accueil
+				[(#ENV{page}|=={sommaire}|oui)<span class="page-indicator">•</span>]
+			</a>
+		</li>
+
+		<!-- menu tous les article -->
+		<li class="menu-item[ (#ENV{page}|=={articles}|?{menu-item-active})]">
+			<a href="#URL_PAGE{articles}"[ class="(#ENV{page}|=={articles}|?{current})"] aria-current="(#ENV{page}|=={articles}|?{page})">
+				Tous les articles
+				[(#ENV{page}|=={articles}|oui)<span class="page-indicator">•</span>]
+			</a>
+		</li>
+
+
+		<!-- <BOUCLE_rubriques_menu(RUBRIQUES){racine}{par num titre, titre}>
+		[(#SET{is_active, #ENV{id_rubrique}|=={#ID_RUBRIQUE}|ou{#URL_RUBRIQUE|match{#ENV{page}}}})]
+		<li class="menu-item[ (#GET{is_active}|?{menu-item-active})][ (#EXPOSE|?{menu-item-expose})]">
+			<a href="#URL_RUBRIQUE"[ class="(#ENV{id_rubrique}|=={#ID_RUBRIQUE}|?{current})"] aria-current="(#ENV{id_rubrique}|=={#ID_RUBRIQUE}|?{page})">
+				#TITRE
+				[(#GET{is_active}|oui)<span class="page-indicator">•</span>]
+			</a>
+
+		</li>
+
+		</BOUCLE_rubriques_menu> -->
+
+		<!-- munu agenda -->
+		<li class="menu-item[ (#ENV{page}|=={evenements}|?{menu-item-active})]">
+			<a href="#URL_PAGE{evenements}"[ class="(#ENV{page}|=={evenements}|?{current})"] aria-current="(#ENV{page}|=={evenements}|?{page})">
+				Evenements
+				[(#ENV{page}|=={evenements}|oui)<span class="page-indicator">•</span>]
+			</a>
+		</li>
+
+		<li class="menu-item[ (#ENV{page}|=={contacts}|?{menu-item-active})]">
+			<a href="#URL_PAGE{contacts}"[ class="(#ENV{page}|=={contacts}|?{current})"] aria-current="(#ENV{page}|=={contacts}|?{page})">
+				Contacts
+				[(#ENV{page}|=={contacts}|oui)<span class="page-indicator">•</span>]
+			</a>
+		</li>
+
+		<li class="menu-item[ (#ENV{page}|=={organisations}|?{menu-item-active})]">
+			<a href="#URL_PAGE{organisations}"[ class="(#ENV{page}|=={organisations}|?{current})"] aria-current="(#ENV{page}|=={organisations}|?{page})">
+				Organisations
+				[(#ENV{page}|=={organisations}|oui)<span class="page-indicator">•</span>]
+			</a>
+		</li>
+	</ul>
+</nav>

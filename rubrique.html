@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>[(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="(#DESCRIPTIF|textebrut|couper{160})" />]
+
+	#INSERT_HEAD
+</head>
+
+<body class="page-rubrique">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main">
+		<div class="main-container">
+			<div class="contenu">
+				<INCLURE{fond=content/rubrique}{env}>
+			</div>
+		</div>
+	</main>
+
+	<INCLURE{fond=inclure/footer}>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<div class="formulaire_spip formulaire_inscription_evenement formulaire_inscription_evenement--centered">
+	[<p class="reponse_formulaire reponse_formulaire_ok reponse_formulaire--centered">(#ENV*{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur reponse_formulaire--centered">(#ENV*{message_erreur})</p>]
+
+	[(#ENV{editable})
+	<form method="post" action="#ENV{action}" enctype="multipart/form-data" class="form form--centered">
+		#ACTION_FORMULAIRE{#ENV{action}}
+		<div class="editer-groupe editer-groupe--centered">
+			[(#SESSION{statut}|non)
+			<div class="editer editer_email obligatoire editer--centered[ (#ENV**{erreurs}|table_valeur{email}|oui)erreur]">
+				<label for="champ_email" class="label label--centered">Adresse email <span class="obligatoire">*</span></label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{email})</span>]
+				<input type="email" name="email" id="champ_email" value="#ENV{email}" class="text input--centered" required />
+			</div>
+
+			<div class="editer editer_civilite editer--centered[ (#ENV**{erreurs}|table_valeur{civilite}|oui)erreur]">
+				<label for="champ_civilite" class="label label--centered">Civilité</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{civilite})</span>]
+				<select name="civilite" id="champ_civilite" class="select select--centered">
+					<option value="">Sélectionner</option>
+					<option value="M."[(#ENV{civilite}|=={M.}|oui) selected="selected"]>M.</option>
+					<option value="Mme"[(#ENV{civilite}|=={Mme}|oui) selected="selected"]>Mme</option>
+				</select>
+			</div>
+
+			<div class="editer editer_prenom obligatoire editer--centered[ (#ENV**{erreurs}|table_valeur{prenom}|oui)erreur]">
+				<label for="champ_prenom" class="label label--centered">Prénom <span class="obligatoire">*</span></label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{prenom})</span>]
+				<input type="text" name="prenom" id="champ_prenom" value="#ENV{prenom}" class="text input--centered" required />
+			</div>
+
+			<div class="editer editer_nom obligatoire editer--centered[ (#ENV**{erreurs}|table_valeur{nom}|oui)erreur]">
+				<label for="champ_nom" class="label label--centered">Nom <span class="obligatoire">*</span></label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{nom})</span>]
+				<input type="text" name="nom" id="champ_nom" value="#ENV{nom}" class="text input--centered" required />
+			</div>
+			]
+
+			[(#SESSION{statut}|oui)
+			<div class="editer editer_email editer--centered">
+				<label for="champ_email" class="label label--centered">Adresse email</label>
+				<input type="email" name="email" value="#ENV{email}" disabled />
+			</div>
+
+			<div class="editer editer_civilite editer--centered[ (#ENV**{erreurs}|table_valeur{civilite}|oui)erreur]">
+				<label for="champ_civilite" class="label label--centered">Civilité</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{civilite})</span>]
+				<select name="civilite" id="champ_civilite" class="select select--centered">
+					<option value="">Sélectionner</option>
+					<option value="M."[(#ENV{civilite}|=={M.}|oui) selected="selected"]>M.</option>
+					<option value="Mme"[(#ENV{civilite}|=={Mme}|oui) selected="selected"]>Mme</option>
+				</select>
+			</div>
+
+			<div class="editer editer_prenom obligatoire editer--centered[ (#ENV**{erreurs}|table_valeur{prenom}|oui)erreur]">
+				<label for="champ_prenom" class="label label--centered">Prénom <span class="obligatoire">*</span></label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{prenom})</span>]
+				<input type="text" name="prenom" id="champ_prenom" value="#ENV{prenom}" class="text input--centered" required />
+			</div>
+
+			<div class="editer editer_nom obligatoire editer--centered[ (#ENV**{erreurs}|table_valeur{nom}|oui)erreur]">
+				<label for="champ_nom" class="label label--centered">Nom <span class="obligatoire">*</span></label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{nom})</span>]
+				<input type="text" name="nom" id="champ_nom" value="#ENV{nom}" class="text input--centered" required />
+			</div>
+			]
+
+			<div class="editer editer_institution editer--centered[ (#ENV**{erreurs}|table_valeur{institution}|oui)erreur]">
+				<label for="champ_institution" class="label label--centered">Institution</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{institution})</span>]
+				<input type="text" name="institution" id="champ_institution" value="#ENV{institution}" class="text input--centered" />
+			</div>
+
+			<div class="editer editer_fonction editer--centered[ (#ENV**{erreurs}|table_valeur{fonction}|oui)erreur]">
+				<label for="champ_fonction" class="label label--centered">Fonction</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{fonction})</span>]
+				<input type="text" name="fonction" id="champ_fonction" value="#ENV{fonction}" class="text input--centered" />
+			</div>
+
+			<div class="editer editer_telephone editer--centered[ (#ENV**{erreurs}|table_valeur{telephone}|oui)erreur]">
+				<label for="champ_telephone" class="label label--centered">Téléphone</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{telephone})</span>]
+				<input type="tel" name="telephone" id="champ_telephone" value="#ENV{telephone}" class="text input--centered" />
+			</div>
+
+			<div class="editer editer_organisation editer--centered[ (#ENV**{erreurs}|table_valeur{organisation}|oui)erreur]">
+				<label for="champ_organisation" class="label label--centered">Organisation / Entreprise</label>
+				[<span class="erreur_message erreur_message--centered">(#ENV**{erreurs}|table_valeur{organisation})</span>]
+				<input type="text" name="organisation" id="champ_organisation" value="#ENV{organisation}" class="text input--centered" />
+			</div>
+
+			[(#ENV{places_disponibles}|=={0}|oui)
+			<div class="info-places complet info-places--centered">
+				<div class="alert alert--warning alert--centered">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+						<path d="M12 9v4"/>
+						<path d="m12 17 .01 0"/>
+					</svg>
+					<p>Cet événement est complet. Vous pouvez vous inscrire sur liste d'attente.</p>
+				</div>
+			</div>
+			]
+		</div>
+
+		<div class="boutons boutons--centered">
+			<input type="submit" class="btn btn-primary btn--large btn--centered" value="S'inscrire à l'événement" />
+		</div>
+	</form>
+	]
+</div>

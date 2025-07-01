@@ -1,0 +1,51 @@
+<BOUCLE_auteur_principal(AUTEURS){id_auteur}>
+<div class="contenu-auteur">
+	<header class="auteur-header">
+		<div class="auteur-identite">
+			[(#LOGO_AUTEUR|image_reduire{150,150})]
+			<h1 class="nom">#NOM</h1>
+		</div>
+	</header>
+
+	<div class="auteur-infos">
+		[<div class="bio">(#BIO)</div>]
+		[<div class="site-web">
+			<h3>Site web</h3>
+			<p><a href="(#URL_SITE)" class="spip_out">[(#NOM_SITE|sinon{[(#URL_SITE)]})]</a></p>
+		</div>]
+	</div>
+
+	<!-- Articles de l'auteur -->
+	<B_articles>
+	<div class="auteur-articles">
+		<h2>Articles publiés par #NOM (#TOTAL_BOUCLE)</h2>
+		<div class="liste-articles">
+			<BOUCLE_articles(ARTICLES) {id_auteur} {!par date} {pagination 10}>
+			<article class="article-resume">
+				<h3><a href="#URL_ARTICLE">#TITRE</a></h3>
+				[<div class="date">Publié le (#DATE|affdate)</div>]
+				[<div class="introduction">(#INTRODUCTION{300})</div>]
+				<div class="lire-suite">
+					<a href="#URL_ARTICLE">Lire la suite</a>
+				</div>
+			</article>
+			</BOUCLE_articles>
+		</div>
+		[<div class="pagination">(#PAGINATION)</div>]
+	</div>
+	</B_articles>
+	<div class="auteur-sans-articles">
+		<p>Cet auteur n'a pas encore publié d'articles.</p>
+	</div>
+	<//B_articles>
+
+</BOUCLE_auteur_principal>
+<div class="auteur-inexistant">
+	<h2>Auteur non trouvé</h2>
+	<p>L'auteur que vous recherchez n'existe pas ou n'est plus disponible.</p>
+	<p>Vous pouvez consulter la liste de nos auteurs ou revenir à la page d'accueil.</p>
+	<div class="actions">
+		<a href="#URL_SITE_SPIP" class="btn-retour">Retour à l'accueil</a>
+	</div>
+</div>
+<//B_auteur_principal>

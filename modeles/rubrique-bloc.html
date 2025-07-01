@@ -1,0 +1,41 @@
+<BOUCLE_rubrique_bloc(RUBRIQUES){id_rubrique=#ENV{id_rubrique}}>
+<div class="rubrique-bloc">
+	<h3 class="rubrique-titre">
+		<a href="#URL_RUBRIQUE">#TITRE</a>
+	</h3>
+	[<div class="rubrique-description">
+		(#DESCRIPTIF|couper{150})
+	</div>]
+
+	<B_articles_rubrique>
+	<div class="liste-articles-mini">
+		<BOUCLE_articles_rubrique(ARTICLES){id_rubrique}{par date}{inverse}{0,3}>
+			<div class="article-mini">
+				<h4 class="article-mini-titre">
+					<a href="#URL_ARTICLE">#TITRE</a>
+				</h4>
+				<div class="article-mini-meta">
+					<span class="date-mini">[(#DATE|affdate_court)]</span>
+					[<span class="auteur-mini">par (#LESAUTEURS)</span>]
+				</div>
+				[<div class="article-mini-extrait">
+					(#CHAPO|sinon{#INTRODUCTION}|sinon{#TEXTE}|textebrut|couper{120})
+				</div>]
+				<a href="#URL_ARTICLE" class="lire-suite">Lire la suite →</a>
+			</div>
+			[(#COMPTEUR_BOUCLE|<{#TOTAL_BOUCLE}|oui)<div class="separateur-article"></div>]
+		</BOUCLE_articles_rubrique>
+	</div>
+	[<div class="voir-plus-rubrique">
+		<a href="#URL_RUBRIQUE" class="btn-voir-tous">
+			Voir tous les articles (#TOTAL_BOUCLE)
+		</a>
+	</div>]
+	</B_articles_rubrique>
+	<div class="aucun-article-rubrique">
+		<p>Aucun article dans cette rubrique.</p>
+	</div>
+	<//B_articles_rubrique>
+</div>
+</BOUCLE_rubrique_bloc>
+

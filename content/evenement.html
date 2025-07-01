@@ -1,0 +1,112 @@
+<div class="contenu-evenements">
+	<!-- Événements à venir -->
+	<B_evenements_avenir>
+	<section class="evenements-avenir">
+		<h2>Événements à venir</h2>
+		<div class="liste-evenements">
+		<BOUCLE_evenements_avenir(EVENEMENTS){evenement_a_venir}{par date_debut}{statut=publie}>
+			<article class="evenement-item evenement-avenir">
+				<div class="evenement-date">
+					<span class="jour">[(#DATE_DEBUT|jour)]</span>
+					<span class="mois">[(#DATE_DEBUT|nom_mois|couper{3})]</span>
+					<span class="annee">[(#DATE_DEBUT|annee)]</span>
+				</div>
+
+				<div class="evenement-contenu">
+					<h3><a href="#URL_EVENEMENT">#TITRE</a></h3>
+					[<div class="evenement-lieu">(#LIEU|PtoBR)</div>]
+					[<div class="evenement-adresse">(#ADRESSE|PtoBR)</div>]
+					[<div class="evenement-horaire">[(#HORAIRE|=={oui}|oui)[(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]</div>]
+					[<div class="evenement-intro">(#DESCRIPTIF|couper{150})</div>]
+
+				</div>
+
+				<div class="evenement-actions">
+					<a href="#URL_EVENEMENT" class="btn-voir">Voir les détails</a>
+					[(#INSCRIPTION|=={1}|oui)
+						<a href="#URL_EVENEMENT" class="btn-inscription">S'inscrire</a>
+					]
+				</div>
+			</article>
+		</BOUCLE_evenements_avenir>
+		</div>
+	</section>
+	</B_evenements_avenir>
+	<div class="aucun-evenement">
+		<h2>Événements à venir</h2>
+		<p>Aucun événement prévu pour le moment.</p>
+		<p>Revenez bientôt pour découvrir nos prochaines activités !</p>
+	</div>
+
+	<!-- Toggle pour afficher les événements passés -->
+	<div class="toggle-evenements-passes">
+		<button id="toggle-passes" class="btn-toggle" aria-expanded="false">
+			<span class="toggle-text">Voir les événements passés</span>
+			<span class="toggle-icon">▼</span>
+		</button>
+	</div>
+
+	<!-- Événements passés (masqués par défaut) -->
+	<section class="evenements-passes" id="evenements-passes" style="display: none;">
+		<h2>Événements passés</h2>
+
+		<B_evenements_passes>
+		<div class="liste-evenements">
+		<BOUCLE_evenements_passes(EVENEMENTS){evenement_passe}{par date_debut}{inverse}{0,10}{statut=publie}>
+			<article class="evenement-item evenement-passe">
+				<div class="evenement-date">
+					<span class="jour">[(#DATE_DEBUT|jour)]</span>
+					<span class="mois">[(#DATE_DEBUT|nom_mois|couper{3})]</span>
+					<span class="annee">[(#DATE_DEBUT|annee)]</span>
+				</div>
+
+				<div class="evenement-contenu">
+					<h3><a href="#URL_EVENEMENT">#TITRE</a></h3>
+					[<div class="evenement-lieu">(#LIEU|PtoBR)</div>]
+					[<div class="evenement-horaire">[(#HORAIRE|=={oui}|oui)[(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]</div>]
+					[<div class="evenement-intro">(#DESCRIPTIF|couper{150})</div>]
+				</div>
+
+				<div class="evenement-actions">
+					<a href="#URL_EVENEMENT" class="btn-voir">Voir le compte-rendu</a>
+				</div>
+			</article>
+		</BOUCLE_evenements_passes>
+
+			<div class="voir-plus-evenements">
+				<a href="[(#URL_PAGE{evenements}|parametre_url{archives,oui})]" class="btn-voir-plus">Voir tous les événements passés</a>
+			</div>
+
+		</div>
+		</B_evenements_passes>
+		<p class="aucun-evenement-passe">Aucun événement passé à afficher.</p>
+	</section>
+</div>
+
+<script>
+// Script pour le toggle des événements passés
+document.addEventListener('DOMContentLoaded', function() {
+	const toggleBtn = document.getElementById('toggle-passes');
+	const evenementsPasses = document.getElementById('evenements-passes');
+	const toggleText = toggleBtn.querySelector('.toggle-text');
+	const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+
+	if (toggleBtn && evenementsPasses) {
+		toggleBtn.addEventListener('click', function() {
+			const isVisible = evenementsPasses.style.display !== 'none';
+
+			if (isVisible) {
+				evenementsPasses.style.display = 'none';
+				toggleText.textContent = 'Voir les événements passés';
+				toggleIcon.textContent = '▼';
+				toggleBtn.setAttribute('aria-expanded', 'false');
+			} else {
+				evenementsPasses.style.display = 'block';
+				toggleText.textContent = 'Masquer les événements passés';
+				toggleIcon.textContent = '▲';
+				toggleBtn.setAttribute('aria-expanded', 'true');
+			}
+		});
+	}
+});
+</script>

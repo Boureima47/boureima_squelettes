@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Articles - [(#NOM_SITE_SPIP|textebrut)]</title>
+	<meta name="description" content="Tous les articles de [(#NOM_SITE_SPIP|textebrut)]" />
+	#INSERT_HEAD
+</head>
+
+<body class="page-articles">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main">
+		<div class="main-container">
+			<section class="contenu">
+				<!-- Section de recherche principale -->
+				<div class="recherche-principale">
+					#FORMULAIRE_RECHERCHE{#URL_PAGE{recherche}}
+				</div>
+
+
+				<div class="deux-colonnes-layout articles-layout">
+					<!-- Colonne de gauche: Articles récents -->
+					<div class="colonne-gauche">
+						<h2>Articles récents</h2>
+						<B_articles_recents>
+						<div class="articles-list">
+							<BOUCLE_articles_recents(ARTICLES){par date}{inverse}{pagination 8}>
+								<INCLURE{fond=modeles/article-card}{id_article}>
+							</BOUCLE_articles_recents>
+						</div>
+						[<div class="pagination">(#PAGINATION{page})</div>]
+						</B_articles_recents>
+						<div class="aucun-article">
+							<p>Aucun article récent pour le moment.</p>
+							<p>Revenez bientôt pour découvrir nos prochaines publications !</p>
+						</div>
+						<//B_articles_recents>
+					</div>
+
+					<!-- Colonne de droite: Articles par rubriques -->
+					<div class="colonne-droite">
+						<h2>Rubriques</h2>
+											<B_rubriques>
+					<div class="rubriques-list">
+						<BOUCLE_rubriques(RUBRIQUES){par titre}{pagination 10}>
+							<INCLURE{fond=modeles/rubrique-bloc}{id_rubrique}>
+						</BOUCLE_rubriques>
+					</div>
+						[<div class="pagination">(#PAGINATION{page})</div>]
+						</B_rubriques>
+						<div class="aucune-rubrique">
+							<p>Aucune rubrique à afficher.</p>
+						</div>
+						<//B_rubriques>
+
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<INCLURE{fond=inclure/footer}>
+</body>
+</html>

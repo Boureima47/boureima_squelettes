@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<BOUCLE_evenement_head(EVENEMENTS){id_evenement}>
+	<title>[(#TITRE|textebrut)] - [(#NOM_SITE_SPIP|textebrut)]</title>
+	[<meta name="description" content="(#DESCRIPTIF|textebrut|couper{160})" />]
+	</BOUCLE_evenement_head>
+	#INSERT_HEAD
+</head>
+
+<body class="page-evenement">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main" class="main-with-spacing">
+		<div class="main-container">
+
+		<div class="container">
+			<BOUCLE_evenement(EVENEMENTS){id_evenement}>
+			<article class="">
+				<!-- Section principale avec image et informations essentielles -->
+				<div class="event-card event-card--main">
+					<div class="event-card__header">
+						<h1 class="event-card__title">#TITRE</h1>
+						<div class="date-badge">
+							<div class="date-badge__day">[(#DATE_DEBUT|jour)]</div>
+							<div class="date-badge__month">[(#DATE_DEBUT|nom_mois|couper{3})]</div>
+							<div class="date-badge__year">[(#DATE_DEBUT|annee)]</div>
+						</div>
+					</div>
+
+					<div class="event-card__body">
+						<!-- Image en bannière -->
+						<div class="event-banner">
+							[(#LOGO_EVENEMENT|oui)
+							<div class="event-image event-image--banner">
+								[(#LOGO_EVENEMENT|image_reduire{600,200}|inserer_attribut{alt,#TITRE}|inserer_attribut{class,event-image__img img-fluid})]
+							</div>
+							]
+							[(#LOGO_EVENEMENT|non)
+								<BOUCLE_documents(DOCUMENTS){id_evenement}{extension IN jpg,png,gif}{0,1}>
+								<div class="event-image event-image--banner">
+									[(#FICHIER|image_reduire{600,200}|inserer_attribut{alt,#TITRE}|inserer_attribut{class,event-image__img img-fluid})]
+								</div>
+								</BOUCLE_documents>
+								<div class="event-placeholder event-placeholder--banner">
+									<div class="event-placeholder__icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+									</div>
+								</div>
+								<//B_documents>
+							]
+						</div>
+
+						<!-- Informations sous l'image -->
+						<div class="event-info">
+							<div class="meta-list">
+								<div class="meta-list__item">
+									<div class="meta-list__icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+									</div>
+									<div class="meta-list__content">
+										<span class="meta-list__label">Date et heure</span>
+										<span class="meta-list__value">[(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]</span>
+									</div>
+								</div>
+
+								[<div class="meta-list__item">
+									<div class="meta-list__icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+									</div>
+									<div class="meta-list__content">
+										<span class="meta-list__label">Lieu</span>
+										<span class="meta-list__value">(#LIEU)</span>
+									</div>
+								</div>]
+
+								[<div class="meta-list__item">
+									<div class="meta-list__icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+									</div>
+									<div class="meta-list__content">
+										<span class="meta-list__label">Adresse</span>
+										<span class="meta-list__value">(#ADRESSE|PtoBR)</span>
+									</div>
+								</div>]
+
+								[(#INSCRIPTION|=={1}|oui)
+								<div class="meta-list__item meta-list__item--inscription">
+									<div class="meta-list__icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+									</div>
+									<div class="meta-list__content">
+										<span class="meta-list__label">Inscription</span>
+										<span class="meta-list__value">
+											Requise
+											[(#PLACES|>{0}|oui)
+												<span class="places-info">#NB_INSCRITS sur #PLACES places</span>
+											]
+										</span>
+									</div>
+								</div>
+								]
+							</div>
+
+							[(#INSCRIPTION|=={1}|oui)
+							<div class="event-actions">
+								<a href="[(#URL_PAGE{inscription_evenement}|parametre_url{id_evenement,#ID_EVENEMENT})]"
+								   class="btn btn--inscription">
+									S'inscrire maintenant
+								</a>
+							</div>
+							]
+						</div>
+					</div>
+				</div>
+
+				<!-- Section description -->
+				[<div class="event-card description-card">
+					<div class="event-card__header">
+						<h2 class="event-card__title">À propos de cet événement</h2>
+					</div>
+					<div class="event-card__body">
+						<div class="event-description">
+							(#DESCRIPTIF)
+						</div>
+					</div>
+				</div>]
+				<!-- Section article lié -->
+				<BOUCLE_article_lie(ARTICLES){id_article}>
+				<div class="event-card article-card">
+					<div class="event-card__header">
+						<h2 class="event-card__title">En savoir plus</h2>
+					</div>
+					<div class="event-card__body">
+						<div class="article-preview">
+							<h3 class="article-preview__title"><a href="#URL_ARTICLE">#TITRE</a></h3>
+							[<div class="article-preview__excerpt">(#INTRODUCTION|couper{300})</div>]
+							<div class="article-preview__actions">
+								<a href="#URL_ARTICLE" class="btn btn--article">Lire l'article complet</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				</BOUCLE_article_lie>
+
+				<!-- Section événements liés -->
+				<B_repetitions>
+				<div class="event-card repetitions-card">
+					<div class="event-card__header">
+						<h2 class="event-card__title">Autres dates pour cet événement</h2>
+					</div>
+					<div class="event-card__body">
+						<ul class="repetition-list">
+							<BOUCLE_repetitions(EVENEMENTS){id_evenement_source=#ID_EVENEMENT}{par date_debut}{statut=publie}>
+							<li class="repetition-list__item">
+								<div class="repetition-list__date">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+									[(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})]
+								</div>
+								<a href="#URL_EVENEMENT" class="repetition-list__link">Voir les détails</a>
+							</li>
+							</BOUCLE_repetitions>
+						</ul>
+					</div>
+				</div>
+				</B_repetitions>
+
+				<!-- Section événement source -->
+				<B_source>
+				<div class="event-card source-card">
+					<div class="event-card__header">
+						<h2 class="event-card__title">Série d'événements</h2>
+					</div>
+					<div class="event-card__body">
+						<p>Cet événement fait partie d'une série. Voir l'événement principal :</p>
+						<BOUCLE_source(EVENEMENTS){id_evenement=#ID_EVENEMENT_SOURCE}{statut=publie}>
+						<div class="source-event">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+							<a href="#URL_EVENEMENT" class="source-event__link">#TITRE - [(#DATE_DEBUT|affdate)]</a>
+						</div>
+						</BOUCLE_source>
+					</div>
+				</div>
+				</B_source>
+
+				<!-- Section navigation -->
+				<div class="event-card navigation-card">
+					<div class="event-card__body">
+						<div class="event-navigation">
+							<a href="[(#URL_PAGE{evenements})]" class="btn btn--retour">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+								Retour à tous les événements
+							</a>
+						</div>
+					</div>
+				</div>
+			</article>
+			</BOUCLE_evenement>
+
+			<!-- Message d'erreur si événement non trouvé -->
+			<div class="event-error">
+				<div class="event-card event-card--error">
+					<div class="event-card__header">
+						<h1 class="event-card__title">Événement non trouvé</h1>
+					</div>
+					<div class="event-card__body">
+						<p>L'événement que vous recherchez n'existe pas ou n'est plus disponible.</p>
+						<div class="event-actions">
+							<a href="[(#URL_PAGE{evenements})]" class="btn btn--retour">Voir tous les événements</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<//B_evenement>
+		</div>
+		</div>
+	</main>
+
+		<INCLURE{fond=inclure/footer}>
+</body>
+</html>

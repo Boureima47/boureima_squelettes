@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="#LANG">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Événements - [(#NOM_SITE_SPIP|textebrut)]</title>
+	<meta name="description" content="Événements, conférences et rencontres" />
+	#INSERT_HEAD
+</head>
+
+<body class="page-evenements">
+	<INCLURE{fond=inclure/header}>
+
+	<main id="main" role="main">
+		<div class="main-container">
+			<section class="contenu">
+				<!-- Section de recherche principale -->
+				<div class="recherche-principale">
+					#FORMULAIRE_RECHERCHE{#URL_PAGE{recherche}}
+				</div>
+				<!-- Layout en deux colonnes -->
+				<div class="deux-colonnes-layout evenements-layout">
+					<!-- Colonne de gauche: Événements à venir -->
+					<div class="colonne-gauche">
+						<h2>Événements à venir</h2>
+						<B_evenements_a_venir>
+						<div class="evenements-list">
+							<BOUCLE_evenements_a_venir(EVENEMENTS){evenement_a_venir}{par date_debut}{pagination 8}>
+								<article class="evenement-card">
+									<div class="evenement-date-card">
+										<span class="date-jour">[(#DATE_DEBUT|jour)]</span>
+										<span class="date-mois">[(#DATE_DEBUT|nom_mois|couper{3})]</span>
+										<span class="date-annee">[(#DATE_DEBUT|annee)]</span>
+									</div>
+									<div class="evenement-contenu-card">
+										<h3 class="evenement-titre-card">
+											<a href="#URL_EVENEMENT">#TITRE</a>
+										</h3>
+
+										[(#LOGO_EVENEMENT|oui)
+										<div class="evenement-image-card">
+											<a href="#URL_EVENEMENT">
+												[(#LOGO_EVENEMENT|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+											</a>
+										</div>
+										]
+										[(#LOGO_EVENEMENT|non)
+										<BOUCLE_doc_evenement_a_venir(DOCUMENTS){id_evenement}{extension IN jpg,png,gif}{0,1}>
+										<div class="evenement-image-card">
+											<a href="#URL_EVENEMENT">
+												[(#FICHIER|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+											</a>
+										</div>
+										</BOUCLE_doc_evenement_a_venir>
+										<//B_doc_evenement_a_venir>
+										]
+
+										[<div class="evenement-intro-card">
+											(#DESCRIPTIF|couper{150})
+										</div>]
+
+										<div class="evenement-meta-card">
+											[(#HORAIRE|=={oui}|oui)
+											<div class="evenement-heure-card">
+												<i class="icon-clock"></i> [(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]
+											</div>
+											]
+											[<div class="evenement-lieu-card">
+												<i class="icon-location"></i> (#LIEU)
+											</div>]
+										</div>
+
+										<div class="evenement-actions-card">
+											<a href="#URL_EVENEMENT" class="btn-voir-evenement">Voir les détails</a>
+											[(#INSCRIPTION|=={1}|oui)
+												<a href="#URL_EVENEMENT" class="btn-inscription">S'inscrire</a>
+											]
+										</div>
+									</div>
+								</article>
+							</BOUCLE_evenements_a_venir>
+						</div>
+						[<div class="pagination">(#PAGINATION{page})</div>]
+						</B_evenements_a_venir>
+						<div class="aucun-evenement">
+							<p>Aucun événement à venir pour le moment.</p>
+							<p>Revenez bientôt pour découvrir nos prochaines activités !</p>
+						</div>
+						<//B_evenements_a_venir>
+					</div>
+
+					<!-- Colonne de droite: Événements passés -->
+					<div class="colonne-droite">
+						<h2>Événements passés</h2>
+						<B_evenements_passes>
+						<div class="evenements-list">
+							<BOUCLE_evenements_passes(EVENEMENTS){evenement_passe}{par date_debut}{inverse}{pagination 6}>
+								<article class="evenement-card evenement-passe">
+									<div class="evenement-date-card">
+										<span class="date-jour">[(#DATE_DEBUT|jour)]</span>
+										<span class="date-mois">[(#DATE_DEBUT|nom_mois|couper{3})]</span>
+										<span class="date-annee">[(#DATE_DEBUT|annee)]</span>
+									</div>
+									<div class="evenement-contenu-card">
+										<h3 class="evenement-titre-card">
+											<a href="#URL_EVENEMENT">#TITRE</a>
+										</h3>
+
+										[(#LOGO_EVENEMENT|oui)
+										<div class="evenement-image-card">
+											<a href="#URL_EVENEMENT">
+												[(#LOGO_EVENEMENT|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+											</a>
+										</div>
+										]
+										[(#LOGO_EVENEMENT|non)
+										<BOUCLE_doc_evenement_passe(DOCUMENTS){id_evenement}{extension IN jpg,png,gif}{0,1}>
+										<div class="evenement-image-card">
+											<a href="#URL_EVENEMENT">
+												[(#FICHIER|image_reduire{200,150}|inserer_attribut{alt,#TITRE}|inserer_attribut{loading,lazy})]
+											</a>
+										</div>
+										</BOUCLE_doc_evenement_passe>
+										<//B_doc_evenement_passe>
+										]
+
+										[<div class="evenement-intro-card">
+											(#DESCRIPTIF|couper{150})
+										</div>]
+										<div class="evenement-meta-card">
+											[(#HORAIRE|=={oui}|oui)
+											<div class="evenement-heure-card">
+												<i class="icon-clock"></i> [(#DATE_DEBUT|affdate_debut_fin{#DATE_FIN,#HORAIRE})[ (#TIMEZONE{#HORAIRE,abbr})]]
+											</div>
+											]
+											[<div class="evenement-lieu-card">
+												<i class="icon-location"></i> (#LIEU)
+											</div>]
+										</div>
+										<div class="evenement-actions-card">
+											<a href="#URL_EVENEMENT" class="btn-voir-evenement">Voir le compte-rendu</a>
+										</div>
+									</div>
+								</article>
+							</BOUCLE_evenements_passes>
+						</div>
+						[<div class="pagination">(#PAGINATION{page})</div>]
+						</B_evenements_passes>
+						<div class="aucun-evenement">
+							<p>Aucun événement passé à afficher.</p>
+						</div>
+						<//B_evenements_passes>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+	<INCLURE{fond=inclure/footer}>
+</body>
+</html>
