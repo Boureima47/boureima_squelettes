@@ -1,47 +1,5 @@
 <div class="contenu-organisations">
-	<!-- Bouton pour créer une nouvelle organisation
-	[(#AUTORISER{creer, organisation}|oui)
-	<div class="actions-organisations">
-		<a href="[(#URL_PAGE{modifier_organisation})]" class="btn btn-success btn-icon">
-			<i class="fa fa-plus"></i> <:contacts:creer_organisation:>
-		</a>
-	</div>
-	] -->
 
-	<!-- Filtres et recherche -->
-	<!-- <div class="filtres-organisations"> -->
-		<!-- <form action="#SELF" method="get" class="form-recherche-orga">
-			<div class="recherche-container">
-				<input type="search"
-				       name="recherche"
-				       id="recherche-orga"
-				       placeholder="Rechercher une organisation..."
-				       value="[(#ENV{recherche}|entites_html)]"
-				       class="recherche-input-orga form-control-sm" />
-				<button type="submit" class="recherche-submit-orga btn btn-primary btn-sm">
-					<i class="fa fa-search"></i>
-				</button>
-			</div>
-		</form> -->
-
-		<!-- Filtres par statut juridique -->
-		<!-- <div class="filtres-statut">
-			<label>Filtrer par statut juridique :</label>
-			<select name="statut" id="filtre-statut" onchange="filtrerOrganisations()" class="form-control-sm w-auto">
-				<option value="">Tous les statuts</option>
-				<BOUCLE_statuts(ORGANISATIONS){fusion statut_juridique}{par statut_juridique}>
-					<option value="#STATUT_JURIDIQUE" [(#ENV{statut}|=={#STATUT_JURIDIQUE}|?{selected="selected"})>][(#STATUT_JURIDIQUE|sinon{Non spécifié})]</option>
-				</BOUCLE_statuts>
-			</select>
-		</div> -->
-	<!-- </div> -->
-
-	<!-- Résultats de recherche -->
-	<!-- [(#ENV{recherche}|oui)
-		<div class="resultats-recherche-orga">
-			<h2>Résultats pour : "[(#ENV{recherche}|entites_html)]"</h2>
-		</div> -->
-	<!-- ] -->
 
 	<!-- Tableau des organisations -->
 	<B_organisations>

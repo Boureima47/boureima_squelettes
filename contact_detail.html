@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><BOUCLE_titre(CONTACTS){id_contact}>[(#CIVILITE) ]#PRENOM #NOM</BOUCLE_titre> - [(#NOM_SITE_SPIP|textebrut)]</title>
+	<title><BOUCLE_titre_contact(CONTACTS){id_contact}>[(#CIVILITE) ]#PRENOM #NOM</BOUCLE_titre_contact> - [(#NOM_SITE_SPIP|textebrut)]</title>
 	#INSERT_HEAD
 </head>
 
@@ -14,141 +14,169 @@
 		<div id="main" role="main">
 			<div class="main-container">
 
-				<BOUCLE_contact(CONTACTS){id_contact}>
-				<div class="contenu-contact-detail">
-					<div class="contact-header">
-						<div class="contact-photo">
-							[(#LOGO_CONTACT|image_reduire{150,150}|sinon{
-								<div class="photo-placeholder-large">
-									<svg width="100" height="100" viewBox="0 0 24 24" fill="none">
-										<path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
-									</svg>
+				<BOUCLE_get_auteur(CONTACTS){id_contact}{0,1}>
+					[(#SET{id_auteur_contact, #ID_AUTEUR})]
+				</BOUCLE_get_auteur>
+
+				<BOUCLE_auteur(AUTEURS){id_auteur=#GET{id_auteur_contact}}{tout}>
+					<BOUCLE_contact(CONTACTS){id_auteur=#ID_AUTEUR}{id_contact=#ENV{id_contact}}{0,1}>
+					<div class="contenu-contact-detail">
+						<div class="contact-header">
+							<div class="contact-photo">
+								[(#LOGO_CONTACT|image_reduire{150,150}|sinon{
+									[(#_auteur:LOGO_AUTEUR|image_reduire{150,150}|sinon{
+										<div class="photo-placeholder-large">
+											<svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+												<path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+											</svg>
+										</div>
+									})]
+								})]
+							</div>
+							<div class="contact-titre">
+								<h1>[(#CIVILITE) ]#PRENOM #NOM</h1>
+								<div class="contact-auteur-info">
+									<span class="auteur-nom">Auteur : #_auteur:NOM</span>
+									[(#_auteur:STATUT|puce_statut{auteur})]
 								</div>
-							})]
+								[(#FONCTION|oui)<div class="contact-fonction">#FONCTION</div>]
+								[(#AUTORISER{modifier, contact, #ID_CONTACT}|oui)
+									<div class="contact-actions">
+										<a href="[(#URL_PAGE{modifier_contact}|parametre_url{id_contact,#ID_CONTACT})]" class="btn btn-warning btn-icon">
+											<i class="fa fa-pencil"></i> <:contacts:modifier_contact:>
+										</a>
+									</div>
+								]
+							</div>
 						</div>
-						<div class="contact-titre">
-							<h1>[(#CIVILITE) ]#PRENOM #NOM</h1>
-							[(#FONCTION|oui)<div class="contact-fonction">#FONCTION</div>]
-							[(#AUTORISER{modifier, contact, #ID_CONTACT}|oui)
-								<div class="contact-actions">
-									<a href="[(#URL_PAGE{modifier_contact}|parametre_url{id_contact,#ID_CONTACT})]" class="btn btn-warning btn-icon">
-										<i class="fa fa-pencil"></i> <:contacts:modifier_contact:>
-									</a>
+
+						<div class="contact-details">
+							<div class="contact-fiche">
+								<h2>Informations de contact</h2>
+								<div class="contact-info-grid">
+									[(#EMAIL|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Email</div>
+										<div class="contact-info-value">
+											<a href="mailto:#EMAIL">#EMAIL</a>
+										</div>
+									</div>
+									]
+									[(#_auteur:EMAIL|et{#_auteur:EMAIL|!={#EMAIL}}|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Email auteur</div>
+										<div class="contact-info-value">
+											<a href="mailto:#_auteur:EMAIL">#_auteur:EMAIL</a>
+										</div>
+									</div>
+									]
+									[(#TELEPHONE|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Téléphone</div>
+										<div class="contact-info-value">
+											<a href="tel:#TELEPHONE">#TELEPHONE</a>
+										</div>
+									</div>
+									]
+									[(#MOBILE|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Mobile</div>
+										<div class="contact-info-value">
+											<a href="tel:#MOBILE">#MOBILE</a>
+										</div>
+									</div>
+									]
+									[(#FAX|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Fax</div>
+										<div class="contact-info-value">#FAX</div>
+									</div>
+									]
+									[(#FONCTION|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Fonction</div>
+										<div class="contact-info-value">#FONCTION</div>
+									</div>
+									]
+									[(#CIVILITE|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Civilité</div>
+										<div class="contact-info-value">#CIVILITE</div>
+									</div>
+									]
+									[(#DATE_NAISSANCE|oui)
+									<div class="contact-info-item">
+										<div class="contact-info-label">Date de naissance</div>
+										<div class="contact-info-value">[(#DATE_NAISSANCE|affdate)]</div>
+									</div>
+									]
+									<div class="contact-info-item">
+										<div class="contact-info-label">Statut auteur</div>
+										<div class="contact-info-value">#_auteur:STATUT</div>
+									</div>
 								</div>
+							</div>
+
+							[(#_auteur:BIO|oui)
+							<div class="contact-bio">
+								<h2>Biographie</h2>
+								<div class="bio-content">
+									#_auteur:BIO
+								</div>
+							</div>
+							]
+
+							[(#ADRESSE|ou{#CODE_POSTAL}|ou{#VILLE}|ou{#PAYS}|oui)
+							<div class="contact-adresse">
+								<h2>Adresse</h2>
+								<div class="adresse-complete">
+									[(#ADRESSE|oui)<div class="adresse-rue">#ADRESSE</div>]
+									[(#CODE_POSTAL|oui|ou{#VILLE|oui})<div class="adresse-ville">[(#CODE_POSTAL) ]#VILLE</div>]
+									[(#PAYS|oui)<div class="adresse-pays">#PAYS</div>]
+								</div>
+							</div>
+							]
+
+							<B_organisations>
+							<div class="contact-organisations">
+								<h2>Organisation[(#TOTAL_BOUCLE|>{1}|?{s})]</h2>
+								<ul class="liste-organisations">
+									<BOUCLE_organisations(ORGANISATIONS){id_contact}>
+									<li>
+										<a href="[(#URL_PAGE{organisation_detail}|parametre_url{id_organisation,#ID_ORGANISATION})]">#NOM</a>
+										[(#FONCTION|oui)<span class="fonction-dans-organisation"> - #FONCTION</span>]
+									</li>
+									</BOUCLE_organisations>
+								</ul>
+							</div>
+							</B_organisations>
+
+							[(#DESCRIPTIF|oui)
+							<div class="contact-descriptif">
+								<h2>À propos</h2>
+								<div class="descriptif">
+									#DESCRIPTIF
+								</div>
+							</div>
 							]
 						</div>
+
+						<div class="contact-actions-bottom">
+							<a href="[(#URL_PAGE{contacts})]" class="btn btn-secondary btn-icon">
+								<i class="fa fa-arrow-left"></i> Retour à la liste des contacts
+							</a>
+						</div>
 					</div>
-
-					<div class="contact-details">
-						<div class="contact-fiche">
-							<h2>Informations de contact</h2>
-							<div class="contact-info-grid">
-								[(#EMAIL|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Email</div>
-									<div class="contact-info-value">
-										<a href="mailto:#EMAIL">#EMAIL</a>
-									</div>
-								</div>
-								]
-								[(#TELEPHONE|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Téléphone</div>
-									<div class="contact-info-value">
-										<a href="tel:#TELEPHONE">#TELEPHONE</a>
-									</div>
-								</div>
-								]
-								[(#MOBILE|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Mobile</div>
-									<div class="contact-info-value">
-										<a href="tel:#MOBILE">#MOBILE</a>
-									</div>
-								</div>
-								]
-								[(#FAX|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Fax</div>
-									<div class="contact-info-value">#FAX</div>
-								</div>
-								]
-								[(#FONCTION|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Fonction</div>
-									<div class="contact-info-value">#FONCTION</div>
-								</div>
-								]
-								[(#CIVILITE|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Civilité</div>
-									<div class="contact-info-value">#CIVILITE</div>
-								</div>
-								]
-								[(#DATE_NAISSANCE|oui)
-								<div class="contact-info-item">
-									<div class="contact-info-label">Date de naissance</div>
-									<div class="contact-info-value">[(#DATE_NAISSANCE|affdate)]</div>
-								</div>
-								]
-							</div>
-						</div>
-
-						[(#ADRESSE|ou{#CODE_POSTAL}|ou{#VILLE}|ou{#PAYS}|oui)
-						<div class="contact-adresse">
-							<h2>Adresse</h2>
-							<div class="adresse-complete">
-								[(#ADRESSE|oui)<div class="adresse-rue">#ADRESSE</div>]
-								[(#CODE_POSTAL|oui|ou{#VILLE|oui})<div class="adresse-ville">[(#CODE_POSTAL) ]#VILLE</div>]
-								[(#PAYS|oui)<div class="adresse-pays">#PAYS</div>]
-							</div>
-						</div>
-						]
-
-						<B_organisations>
-						<div class="contact-organisations">
-							<h2>Organisation[(#TOTAL_BOUCLE|>{1}|?{s})]</h2>
-							<ul class="liste-organisations">
-								<BOUCLE_organisations(ORGANISATIONS){id_contact}>
-								<li>
-									<a href="[(#URL_PAGE{organisation_detail}|parametre_url{id_organisation,#ID_ORGANISATION})]">#NOM</a>
-									[(#FONCTION|oui)<span class="fonction-dans-organisation"> - #FONCTION</span>]
-								</li>
-								</BOUCLE_organisations>
-							</ul>
-						</div>
-						</B_organisations>
-
-						[(#DESCRIPTIF|oui)
-						<div class="contact-descriptif">
-							<h2>À propos</h2>
-							<div class="descriptif">
-								#DESCRIPTIF
-							</div>
-						</div>
-						]
-					</div>
-
-					<div class="contact-actions-bottom">
-						<a href="[(#URL_PAGE{contacts})]" class="btn btn-secondary btn-icon">
-							<i class="fa fa-arrow-left"></i> Retour à la liste des contacts
+					</BOUCLE_contact>
+					<div class="contact-inexistant">
+						<h2>Contact non trouvé</h2>
+						<p>Le contact demandé n'existe pas ou n'est plus disponible.</p>
+						<a href="[(#URL_PAGE{contacts})]" class="btn btn-primary btn-icon">
+							<i class="fa fa-list"></i> Retour à la liste des contacts
 						</a>
-						[(#EMAIL|oui)
-						<a href="mailto:#EMAIL" class="btn btn-info btn-icon">
-							<i class="fa fa-envelope"></i> Envoyer un email
-						</a>
-						]
-						<button class="btn btn-outline-secondary btn-icon" onclick="telechargerVCard(this)"
-								data-nom="[(#CIVILITE) ]#PRENOM #NOM"
-								data-email="#EMAIL"
-								data-tel="#TELEPHONE"
-								data-mobile="#MOBILE"
-								data-org="#ORGANISATIONS">
-							<i class="fa fa-address-card"></i> Télécharger la vCard
-						</button>
 					</div>
-				</div>
-				</BOUCLE_contact>
+					<//B_contact>
+				</BOUCLE_auteur>
 				<div class="contact-inexistant">
 					<h2>Contact non trouvé</h2>
 					<p>Le contact demandé n'existe pas ou n'est plus disponible.</p>
@@ -156,43 +184,12 @@
 						<i class="fa fa-list"></i> Retour à la liste des contacts
 					</a>
 				</div>
-				<//B_contact>
+				<//B_auteur>
 			</div>
 		</div>
 	</div>
 
 	<INCLURE{fond=inclure/footer, env}>
 
-	<script>
-	// Fonction pour télécharger une vCard
-	function telechargerVCard(bouton) {
-		const nom = bouton.getAttribute('data-nom');
-		const email = bouton.getAttribute('data-email');
-		const tel = bouton.getAttribute('data-tel');
-		const mobile = bouton.getAttribute('data-mobile');
-		const org = bouton.getAttribute('data-org');
-
-		let vcard = 'BEGIN:VCARD\nVERSION:3.0\n';
-		vcard += 'FN:' + nom + '\n';
-		vcard += 'N:' + nom + ';;;;\n';
-
-		if (email) vcard += 'EMAIL:' + email + '\n';
-		if (tel) vcard += 'TEL;TYPE=WORK:' + tel + '\n';
-		if (mobile) vcard += 'TEL;TYPE=CELL:' + mobile + '\n';
-		if (org) vcard += 'ORG:' + org + '\n';
-
-		vcard += 'END:VCARD';
-
-		const blob = new Blob([vcard], { type: 'text/vcard' });
-		const url = window.URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = nom.replace(/\s+/g, '_') + '.vcf';
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		window.URL.revokeObjectURL(url);
-	}
-	</script>
 </body>
 </html>

@@ -9,13 +9,49 @@
 
 	<div class="auteur-infos">
 		[<div class="bio">(#BIO)</div>]
-		[<div class="site-web">
-			<h3>Site web</h3>
-			<p><a href="(#URL_SITE)" class="spip_out">[(#NOM_SITE|sinon{[(#URL_SITE)]})]</a></p>
-		</div>]
+
+		<BOUCLE_contact_auteur(CONTACTS){id_auteur}>
+		<div class="contact-info">
+			[<p class="civilite-nom"><strong>(#CIVILITE) #PRENOM #NOM</strong></p>]
+			[<p class="fonction">Fonction : (#FONCTION)</p>]
+			[<p><a href="mailto:(#EMAIL)">#EMAIL</a></p>]
+		</div>
+		</BOUCLE_contact_auteur>
+
+		<B_organisations_auteur>
+		<div class="organisations-auteur">
+			<h3>Organisation[(#TOTAL_BOUCLE|singulier_ou_pluriel{'','s'})]</h3>
+			<ul class="liste-organisations">
+				<BOUCLE_organisations_auteur(ORGANISATIONS){id_auteur}>
+				<li class="organisation-item">
+					<h4><a href="[(#ID_ORGANISATION|generer_url_entite{organisation})]">#NOM</a></h4>
+					[<p class="statut-juridique">(#STATUT_JURIDIQUE)</p>]
+					[<p class="activite">Secteur : (#ACTIVITE)</p>]
+					[<div class="org-descriptif">(#DESCRIPTIF)</div>]
+					[<p class="url-site"><a href="(#URL_SITE)" class="spip_out">Site web</a></p>]
+				</li>
+				</BOUCLE_organisations_auteur>
+			</ul>
+		</div>
+		</B_organisations_auteur>
+
+		<B_organisations_liees>
+		<div class="organisations-liees">
+			<h3>Organisation[(#TOTAL_BOUCLE|singulier_ou_pluriel{'','s'})] associée[(#TOTAL_BOUCLE|singulier_ou_pluriel{'','s'})]</h3>
+			<ul class="liste-organisations-liees">
+				<BOUCLE_organisations_liees(ORGANISATIONS organisations_liens){organisations_liens.objet=auteur}{organisations_liens.id_objet=#ID_AUTEUR}>
+				<li class="organisation-liee">
+					<h4><a href="[(#ID_ORGANISATION|generer_url_entite{organisation})]">#NOM</a></h4>
+					[<p class="type-liaison">Relation : (#TYPE_LIAISON)</p>]
+					[<p class="statut-juridique">(#STATUT_JURIDIQUE)</p>]
+					[<p class="activite">Secteur : (#ACTIVITE)</p>]
+				</li>
+				</BOUCLE_organisations_liees>
+			</ul>
+		</div>
+		</B_organisations_liees>
 	</div>
 
-	<!-- Articles de l'auteur -->
 	<B_articles>
 	<div class="auteur-articles">
 		<h2>Articles publiés par #NOM (#TOTAL_BOUCLE)</h2>
