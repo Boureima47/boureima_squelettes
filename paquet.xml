@@ -13,6 +13,8 @@
 	<auteur lien="https://boureima-spip.test">Boureima</auteur>
 	<licence>GPL-3.0-only</licence>
 
+	<lien rel="documentation">https://gitlab.com/boureima.abdoulkadri-group/boureima_squelettes/-/blob/main/README.md?ref_type=heads</lien>
+
 	<necessite nom="SPIP" compatibilite="[4.4.0;4.*]" />
 	<necessite nom="agenda" compatibilite="[4.0.0;]" />
 
