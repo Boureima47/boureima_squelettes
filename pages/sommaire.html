@@ -12,22 +12,21 @@
 <body class="page-sommaire">
 			<INCLURE{fond=inclure/header}>
 		<!-- Section de recherche principale -->
-		<div class="recherche-principale">
-			<h2>Rechercher sur le site</h2>
-			<div class="recherche-principale-form">
-				<INCLURE{fond=inclure/recherche}>
-			</div>
-		</div>
+
 		<main id="main" role="main">
 		<div class="container">
 			<section class="contenu">
-
+				<div class="recherche-principale">
+					<div class="recherche-principale-form">
+						<INCLURE{fond=inclure/recherche}>
+					</div>
+				</div>
 
 				<!-- Layout en deux colonnes -->
 				<div class="deux-colonnes-layout">
 					<!-- Colonne de gauche: Articles par secteur -->
 					<div class="colonne-gauche">
-						<h3>Articles par secteur</h3>
+						<h2>Articles par secteur</h2>
 						<div class="secteurs-list">
 							<BOUCLE_rubriques(RUBRIQUES){par titre}{pagination 10}>
 								<INCLURE{fond=modeles/rubrique-bloc}{id_rubrique}>
@@ -37,7 +36,7 @@
 
 					<!-- Colonne de droite: Événements à venir -->
 					<div class="colonne-droite">
-						<h3>Prochains événements</h3>
+						<h2>Prochains événements</h2>
 
 						<B_evenements_prochains>
 						<div class="evenements-list">
