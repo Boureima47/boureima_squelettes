@@ -7,10 +7,8 @@
 ]
 
 <div class="formulaire_spip formulaire_recherche[ (#ENV{class})]" id="formulaire_recherche">
-  <form action="[(#ENV{action}|sinon{#URL_PAGE{recherche}})]" method="get" class="form-recherche">
-    [(#ENV{action}|non)
-      <input type="hidden" name="page" value="recherche" />
-    ]
+  <form action="[(#ENV{action}|sinon{spip.php})]" method="get" class="form-recherche">
+    <input type="hidden" name="page" value="recherche" />
     <div class="recherche-container">
       <input type="search"
              class="search text"

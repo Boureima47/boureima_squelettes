@@ -18,10 +18,27 @@
 				<div class="recherche-principale">
 					#FORMULAIRE_RECHERCHE{#URL_PAGE{recherche}}
 				</div>
+
+				<!-- Filtre select moderne -->
+				<div class="filtre-evenements">
+					<div class="filtre-container">
+						<label for="evenements-filter" class="filtre-label">
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+							</svg>
+							Filtrer les événements
+						</label>
+						<select id="evenements-filter" class="filtre-select-moderne">
+							<option value="all">Tous les événements</option>
+							<option value="upcoming">Événements à venir</option>
+							<option value="past">Événements passés</option>
+						</select>
+					</div>
+				</div>
 				<!-- Layout en deux colonnes -->
 				<div class="deux-colonnes-layout evenements-layout">
 					<!-- Colonne de gauche: Événements à venir -->
-					<div class="colonne-gauche">
+					<div class="colonne-gauche colonne-evenements" data-type="upcoming">
 						<h2>Événements à venir</h2>
 						<B_evenements_a_venir>
 						<div class="evenements-list">
@@ -90,7 +107,7 @@
 					</div>
 
 					<!-- Colonne de droite: Événements passés -->
-					<div class="colonne-droite">
+					<div class="colonne-droite colonne-evenements" data-type="past">
 						<h2>Événements passés</h2>
 						<B_evenements_passes>
 						<div class="evenements-list">
@@ -155,6 +172,86 @@
 			</section>
 		</div>
 	</main>
+
 	<INCLURE{fond=inclure/footer}>
+
+	<script>
+	// Script pour le filtrage des événements
+	document.addEventListener('DOMContentLoaded', function() {
+		const filtreSelect = document.getElementById('evenements-filter');
+		const colonneGauche = document.querySelector('.colonne-gauche');
+		const colonneDroite = document.querySelector('.colonne-droite');
+		const evenementsLayout = document.querySelector('.evenements-layout');
+		let currentFilter = 'all';
+
+		// Fonction pour appliquer le filtre
+		function applyFilter(filter) {
+			// Appliquer le filtre
+			switch(filter) {
+				case 'upcoming':
+					colonneGauche.style.display = 'block';
+					colonneDroite.style.display = 'none';
+					evenementsLayout.classList.remove('filtre-past', 'filtre-all');
+					evenementsLayout.classList.add('filtre-upcoming');
+					break;
+				case 'past':
+					colonneGauche.style.display = 'none';
+					colonneDroite.style.display = 'block';
+					evenementsLayout.classList.remove('filtre-upcoming', 'filtre-all');
+					evenementsLayout.classList.add('filtre-past');
+					break;
+				case 'all':
+				default:
+					colonneGauche.style.display = 'block';
+					colonneDroite.style.display = 'block';
+					evenementsLayout.classList.remove('filtre-upcoming', 'filtre-past');
+					evenementsLayout.classList.add('filtre-all');
+					break;
+			}
+
+			currentFilter = filter;
+			// Sauvegarder le filtre actuel dans localStorage
+			localStorage.setItem('evenements_filtre', filter);
+		}
+
+		// Écouteur d'événement pour le select
+		if (filtreSelect) {
+			filtreSelect.addEventListener('change', function() {
+				const filter = this.value;
+				applyFilter(filter);
+			});
+		}
+
+		// Récupérer le filtre sauvegardé au chargement de la page
+		const savedFilter = localStorage.getItem('evenements_filtre');
+		if (savedFilter && savedFilter !== 'null') {
+			filtreSelect.value = savedFilter;
+			applyFilter(savedFilter);
+		}
+
+		// Raccourcis clavier
+		document.addEventListener('keydown', function(e) {
+			if (e.altKey) {
+				switch(e.key) {
+					case '1':
+						e.preventDefault();
+						filtreSelect.value = 'upcoming';
+						applyFilter('upcoming');
+						break;
+					case '2':
+						e.preventDefault();
+						filtreSelect.value = 'past';
+						applyFilter('past');
+						break;
+					case '3':
+						e.preventDefault();
+						filtreSelect.value = 'all';
+						applyFilter('all');
+						break;
+				}
+			}
+		});
+	});
+	</script>
 </body>
 </html>

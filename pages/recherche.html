@@ -10,27 +10,6 @@
     <div class="recherche-header">
       <h1>Résultats de la recherche</h1>
 
-      [(#ENV{recherche}|oui)
-        <div class="recherche-info">
-          <p>Résultats pour : <strong>"#ENV{recherche}"</strong></p>
-
-          <!-- Formulaire de recherche pour raffiner -->
-          <div class="recherche-raffiner">
-            #FORMULAIRE_RECHERCHE{#URL_PAGE{recherche}}
-          </div>
-        </div>
-      ]
-
-      [(#ENV{recherche}|non)
-        <div class="recherche-vide">
-          <p>Veuillez saisir un terme de recherche</p>
-          <div class="recherche-principale">
-            #FORMULAIRE_RECHERCHE{#URL_PAGE{recherche}, Que recherchez-vous ?}
-          </div>
-        </div>
-      ]
-    </div>
-
     [(#ENV{recherche}|oui)
       <div class="recherche-resultats">
         <!-- Compter les résultats -->
